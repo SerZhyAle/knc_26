@@ -15,6 +15,9 @@ Version: 26.05.31.0400
 | Static routes copied to `dist/history/`, `dist/about/`, `dist/privacy/` | Passed |
 | Runtime `src/` and `public/` references to `temp/` | None found except negative test assertion |
 | `src/game/` DOM/Canvas/localStorage/`Math.random` boundary | No runtime violations found |
+| GitHub Actions CI | Passed |
+| GitHub Pages deploy workflow | Passed |
+| Public smoke: `/`, `/history/`, `/about/`, `/privacy/`, manifest, service worker, robots, sitemap | Passed: HTTP 200 |
 
 ## Gameplay Coverage
 
@@ -38,14 +41,15 @@ Version: 26.05.31.0400
 - Settings reset board size and preserve record through progress helpers.
 - localStorage save version preserves compatible saves and resets incompatible game state while preserving settings and record.
 
-## Release Blockers
+## Release Status
 
-| Blocker | Status |
+| Item | Status |
 |---|---|
-| GitHub repository push and Pages workflow run are pending. | Required for public smoke check |
-| `sitemap.xml` uses canonical `https://serzhyale.github.io/knc_26/` URLs. | Ready for deployment |
-| Git release tag was not created. | Requires explicit approval |
+| GitHub repository | `https://github.com/SerZhyAle/knc_26` |
+| Public GitHub Pages URL | `https://serzhyale.github.io/knc_26/` |
+| `sitemap.xml` canonical URLs | `https://serzhyale.github.io/knc_26/` |
+| Git release tag | `26.05.31.0400` |
 
 ## Readiness Verdict
 
-Implementation is locally MVP-ready. Public release is blocked on GitHub repository remote/Pages URL configuration and explicit tag approval.
+Implementation is MVP-ready and publicly deployed through GitHub Pages.

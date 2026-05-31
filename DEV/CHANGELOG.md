@@ -9,6 +9,9 @@ All modifications to the project are logged here with timestamps.
 
 | Date | File | Component | Description |
 |------|------|-----------|-------------|
+| 2026-05-31 21:06:34 | DEV/ROADMAP.md | R11 MVP Release | Mark R11 as complete after public deploy smoke |
+| 2026-05-31 21:06:28 | CHANGELOG.md | R11 MVP Release | Record public deployment verification |
+| 2026-05-31 21:06:20 | DEV/QA_MVP_CHECKLIST.md | R11 MVP Release | Record successful public Pages smoke and release status |
 | 2026-05-31 21:03:07 | DEV/questionnaire.ru | R11 MVP Release | Switch hosting question to knc_26 GitHub Pages target |
 | 2026-05-31 21:02:48 | DEV/specification.ru | R11 MVP Release | Switch documented GitHub Pages path to knc_26 |
 | 2026-05-31 21:02:42 | DEV/ROADMAP.md | R11 MVP Release | Switch Pages base path note to knc_26 |
