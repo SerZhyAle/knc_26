@@ -10,10 +10,12 @@ All notable changes to KnC are documented here.
 - Pure domain engine for Monster movement, Wall push rules, Kryvavitsa, Shadows, victory, defeat, and deterministic RNG.
 - Board generation with bounded retries, path guarantee, first legal move guarantee, wall density, scoring, and progression.
 - Canvas rendering with Original 1999 PNG assets and Color fallback mode.
+- Windows 2003 intermediate skin mode using promoted VB6 GIF assets.
 - Keyboard, mouse, and touch input through a one-input one-turn controller.
 - HUD, menu, settings, rules, about overlay, victory/defeat notifications, and responsive layout.
 - localStorage save/resume, save versioning, EN/RU/UK translations, and settings persistence.
 - PWA manifest, service worker, GitHub Pages deploy workflow, history/about/privacy pages, README, robots policy, and sitemap.
+- English/Russian language switching on public history/about/privacy pages.
 
 ### Release Verification
 

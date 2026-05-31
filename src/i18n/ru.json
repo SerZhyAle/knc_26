@@ -1,7 +1,7 @@
 {
   "about.body": "Web/PWA-ремейк DOS-игры 1999 года Сергея Жигуненко, версия 2026 года.",
   "about.title": "Об игре",
-  "about.version": "Версия 26.05.31.0400",
+  "about.version": "Версия 26.05.31.2214",
   "action.apply": "Применить",
   "action.close": "Закрыть",
   "action.newGame": "Новая игра",
@@ -9,7 +9,7 @@
   "app.brand.short": "КнС",
   "app.status.assetsFallback": "Активен резервный цветовой режим.",
   "app.status.foundationReady": "Каркас репозитория готов.",
-  "app.status.loadingAssets": "Загрузка оригинальной графики 1999",
+  "app.status.loadingAssets": "Загрузка графических ассетов",
   "app.status.ready": "Готово",
   "app.title": "Крывавица и Чудовище",
   "help.body": "Доведите Чудовище до Выхода. После каждого хода сначала ходит Крывавица, затем все Тени. Соседство по вертикали или горизонтали после хода врага означает поражение. Толкайте Стены, чтобы открывать путь или давить Тени.",
@@ -42,6 +42,7 @@
   "settings.visualColor": "Цвет",
   "settings.visualMode": "Вид",
   "settings.visualOriginal": "Оригинал 1999",
+  "settings.visualWindows2003": "Скин Windows 2003",
   "site.github": "GitHub",
   "site.history": "История",
   "site.privacy": "Конфиденциальность"

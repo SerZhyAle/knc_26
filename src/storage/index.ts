@@ -107,10 +107,18 @@ function normalizeSettings(settings: AppSettings, fallbackLocale: Locale): AppSe
     width,
     height,
     locale: isLocale(settings.locale) ? settings.locale : fallbackLocale,
-    visualMode: settings.visualMode === "color" ? "color" : "original1999",
+    visualMode: normalizeVisualMode(settings.visualMode),
     darkTheme: settings.darkTheme,
     showGrid: settings.showGrid
   };
+}
+
+function normalizeVisualMode(value: VisualMode): VisualMode {
+  if (value === "color" || value === "windows2003") {
+    return value;
+  }
+
+  return "original1999";
 }
 
 function normalizeProgress(progress: GameProgress): GameProgress {

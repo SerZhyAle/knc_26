@@ -1,7 +1,7 @@
 {
   "about.body": "Web/PWA-ремейк DOS-гри 1999 року Сергія Жигуненка, версія 2026 року.",
   "about.title": "Про гру",
-  "about.version": "Версія 26.05.31.0400",
+  "about.version": "Версія 26.05.31.2214",
   "action.apply": "Застосувати",
   "action.close": "Закрити",
   "action.newGame": "Нова гра",
@@ -9,7 +9,7 @@
   "app.brand.short": "КнС",
   "app.status.assetsFallback": "Активний резервний кольоровий режим.",
   "app.status.foundationReady": "Каркас репозиторію готовий.",
-  "app.status.loadingAssets": "Завантаження оригінальної графіки 1999",
+  "app.status.loadingAssets": "Завантаження графічних асетів",
   "app.status.ready": "Готово",
   "app.title": "Кривавиця і Чудовисько",
   "help.body": "Доведіть Чудовисько до Виходу. Після кожного ходу спершу ходить Кривавиця, потім усі Тіні. Сусідство по вертикалі або горизонталі після ходу ворога означає поразку. Штовхайте Стіни, щоб відкривати шлях або розчавлювати Тіні.",
@@ -42,6 +42,7 @@
   "settings.visualColor": "Колір",
   "settings.visualMode": "Вигляд",
   "settings.visualOriginal": "Оригінал 1999",
+  "settings.visualWindows2003": "Скін Windows 2003",
   "site.github": "GitHub",
   "site.history": "Історія",
   "site.privacy": "Конфіденційність"

@@ -12,24 +12,80 @@
     <title>KnC Privacy</title>
     <style>
       body { margin: 0; background: #0f1115; color: #f8fafc; font-family: system-ui, sans-serif; line-height: 1.6; }
-      header, main { width: min(48rem, calc(100% - 2rem)); margin: 0 auto; }
-      header { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem 0; }
+      header, main, footer { width: min(48rem, calc(100% - 2rem)); margin: 0 auto; }
+      header { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem 0; align-items: center; }
+      nav, .language-switch { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
       a { color: #8ee06e; }
+      button, .cta { border: 1px solid #8ee06e; background: #172018; color: #f8fafc; padding: 0.45rem 0.7rem; font: inherit; text-decoration: none; }
+      button[aria-pressed="true"] { background: #8ee06e; color: #101314; }
       section { border-top: 2px solid #3f4952; padding: 1rem 0; }
+      footer { border-top: 2px solid #3f4952; padding: 1.25rem 0 2rem; }
     </style>
   </head>
   <body>
     <header>
       <strong>KnC</strong>
-      <nav><a href="../">Play</a> · <a href="../history/">History</a> · <a href="../about/">About</a></nav>
+      <nav>
+        <a href="../" data-i18n-en="Play" data-i18n-ru="Играть">Play</a>
+        <a href="../history/" data-i18n-en="History" data-i18n-ru="История">History</a>
+        <a href="../about/" data-i18n-en="About" data-i18n-ru="Об игре">About</a>
+      </nav>
+      <div class="language-switch" aria-label="Language">
+        <button type="button" data-lang-button="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang-button="ru" aria-pressed="false">RU</button>
+      </div>
     </header>
     <main>
+      <article data-lang-panel="en">
       <h1>Privacy</h1>
       <section>
         <p>KnC does not use a server, analytics, advertising SDK, or remote telemetry.</p>
         <p>Game progress, settings, language, and records are stored only in the browser localStorage on the player device.</p>
         <p>Clearing browser site data removes the saved game.</p>
+        <p><a class="cta" href="../">Play KnC now</a></p>
       </section>
+      </article>
+      <article data-lang-panel="ru" hidden>
+      <h1>Конфиденциальность</h1>
+      <section>
+        <p>КнС не использует сервер, аналитику, рекламные SDK или удалённую телеметрию.</p>
+        <p>Прогресс игры, настройки, язык и рекорды хранятся только в browser localStorage на устройстве игрока.</p>
+        <p>Очистка данных сайта в браузере удаляет сохранённую игру.</p>
+        <p><a class="cta" href="../">Играть в КнС</a></p>
+      </section>
+      </article>
     </main>
+    <footer>
+      <p><a class="cta" href="../" data-i18n-en="Play the current Web/PWA build" data-i18n-ru="Играть в текущую Web/PWA-версию">Play the current Web/PWA build</a></p>
+    </footer>
+    <script>
+      const supportedLanguages = ["en", "ru"];
+      const languageKey = "knc.site.lang";
+      const params = new URLSearchParams(window.location.search);
+      const requestedLanguage = params.get("lang");
+      const initialLanguage = supportedLanguages.includes(requestedLanguage) ? requestedLanguage : localStorage.getItem(languageKey) || "en";
+
+      function setLanguage(language) {
+        const activeLanguage = supportedLanguages.includes(language) ? language : "en";
+        document.documentElement.lang = activeLanguage;
+        localStorage.setItem(languageKey, activeLanguage);
+        for (const panel of document.querySelectorAll("[data-lang-panel]")) {
+          panel.hidden = panel.dataset.langPanel !== activeLanguage;
+        }
+        for (const button of document.querySelectorAll("[data-lang-button]")) {
+          button.setAttribute("aria-pressed", String(button.dataset.langButton === activeLanguage));
+        }
+        for (const element of document.querySelectorAll("[data-i18n-en]")) {
+          element.textContent = activeLanguage === "ru" ? element.dataset.i18nRu : element.dataset.i18nEn;
+        }
+        document.title = activeLanguage === "ru" ? "КнС: конфиденциальность" : "KnC Privacy";
+      }
+
+      for (const button of document.querySelectorAll("[data-lang-button]")) {
+        button.addEventListener("click", () => setLanguage(button.dataset.langButton));
+      }
+
+      setLanguage(initialLanguage);
+    </script>
   </body>
 </html>

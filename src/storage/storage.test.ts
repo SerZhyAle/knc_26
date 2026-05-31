@@ -62,8 +62,21 @@ describe("storage", () => {
     expect(result.incompatible).toBe(false);
   });
 
+  it("preserves the Windows 2003 visual mode setting", () => {
+    const storage = new MemoryStorage();
+    const settings: AppSettings = {
+      ...defaultSettings("en"),
+      visualMode: "windows2003"
+    };
+
+    saveGame(storage, settings, createInitialProgress(), makeState(), 123, "2026-05-31T04:00:00.000Z");
+    const result = loadGame(storage, "en");
+
+    expect(result.settings.visualMode).toBe("windows2003");
+  });
+
   it("exposes the current save version", () => {
-    expect(saveVersion).toBe("26.05.31.0400");
+    expect(saveVersion).toBe("26.05.31.2214");
   });
 });
 

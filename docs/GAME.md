@@ -223,16 +223,30 @@ Victory and defeat:
 
 Settings:
 - board size presets and custom size;
+- visual mode: Original 1999, Windows 2003 skin, or Color fallback;
 - dark theme;
 - grid lines on/off;
 - language selection;
 - progress reset.
 
-The Color display mode is the only MVP mode. Skins are planned after MVP.
+Original 1999 is the primary MVP visual mode. Windows 2003 skin is the intermediate archive mode based on the VB6 GIF assets. Color remains available as a fallback and debugging mode. User-uploaded skins are planned after MVP.
 
 ## Visual Style
 
-Default Color mode:
+Original 1999 mode is the default MVP target. It renders approved PNG assets from `public/assets/original-1999/` on Canvas with `imageSmoothingEnabled = false`.
+
+Original 1999 mode:
+
+| Cell | Appearance |
+|---|---|
+| Empty | Bright cyan DOS-style board field |
+| Wall | Dark red cross-shaped Wall sprite |
+| Monster | Pixel character based on the original Sergey/Monster art |
+| Kryvavitsa | Pixel character based on the original Olga/Krovavitsa art, renamed in modern UI |
+| Shadow | Pixel character based on the original Lena/podKrovavnitsa art |
+| Exit | Bright green oval exit |
+
+Color fallback mode:
 
 | Cell | Suggested color |
 |---|---|
@@ -243,7 +257,18 @@ Default Color mode:
 | Shadow | Black |
 | Exit | Pink / light red |
 
-Dark theme uses a corresponding dark palette. Grid lines are optional and controlled by settings.
+Dark theme affects UI chrome and Color mode. It does not invert Original 1999 sprites or the original board palette. Grid lines are optional and controlled by settings.
+
+Windows 2003 skin mode:
+
+| Cell | Appearance |
+|---|---|
+| Empty | White tiled field from `PLACE.GIF` |
+| Wall | Brick wall from `WALL.GIF` |
+| Monster | Photo-head sprite from `PLAY3.GIF` |
+| Kryvavitsa | Photo-head hunter sprite from `warGIF.GIF` |
+| Shadow | Rotating photo-head sprites from `LENA*.GIF` |
+| Exit | Ukrainian-emblem exit from `EXIT.GIF` |
 
 ## Storage
 
@@ -277,6 +302,9 @@ MVP includes:
 - PWA behavior;
 - GitHub Pages hosting;
 - game site pages: home, history, privacy;
+- Original 1999 PNG assets as the primary visual mode;
+- Windows 2003 GIF skin assets as the intermediate visual mode;
+- Color fallback rendering;
 - localStorage persistence;
 - English, Russian, and Ukrainian UI strings.
 
@@ -289,8 +317,28 @@ Not in MVP:
 - Windows MSIX / WinGet packaging;
 - iOS App Store release.
 
+## Current Implementation
+
+The current MVP version is `26.05.31.2214`. It is implemented with TypeScript, Vite, HTML5 Canvas, Vitest, ESLint, a static service worker, and GitHub Pages deployment.
+
+Implementation boundaries:
+
+| Layer | Location | Role |
+|---|---|---|
+| Game domain | `src/game/` | Pure rules, board generation, scoring, enemy AI, deterministic random behavior |
+| Rendering | `src/render/` | Canvas drawing, geometry, Original 1999 assets, Windows 2003 skin assets, Color fallback |
+| Input | `src/input/` | Keyboard, pointer, and touch command translation |
+| UI | `src/ui/` | HUD, menu, settings, help, about, notifications |
+| Storage | `src/storage/` | localStorage save versioning, compatible resume, settings and record preservation |
+| Localization | `src/i18n/` | EN/RU/UK JSON resources |
+| Static public site | `public/` | PWA manifest, service worker, assets, history/about/privacy routes |
+
 ## Historical Notes
 
-The first version was a DOS game from 1999. Later VB6 versions from 2003-2005 introduced multilingual resources, registry settings, and skin support.
+The first version was a DOS game dated 13 February 1999 and stored in the archive under `OLD/K&C/`. It used the historical spelling Krovavitsa, the SZA author marker, DOS-style pixel graphics, a bright cyan board, red cross-shaped walls, a green oval exit, and a top HUD with level, score, clock, wall count, and shadow count.
 
-The 2026 version is a remake rather than a byte-for-byte clone. It keeps the turn-based survival puzzle identity while intentionally changing some behavior, most notably Shadow lethality.
+The Windows-era archives from 2003-2005 are stored mainly under `OLD/KNC3/` and `OLD/KnC_NEW/`. They introduced Visual Basic GUI forms, multilingual resource files, registry-backed settings, and skin/GIF sprite experiments. The small `OLD/KnC/` VB.NET branch is treated as an abandoned attempt.
+
+The 2026 version is a remake rather than a byte-for-byte clone. It keeps the turn-based survival puzzle identity while intentionally changing some behavior: Shadows now kill with 100% certainty, restart uses a `-500` score penalty instead of losing all points, custom boards can be rectangular, and historical CPU-speed auto-move behavior is not reproduced.
+
+Detailed version archaeology is maintained in [HISTORY.md](HISTORY.md).

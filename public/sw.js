@@ -1,4 +1,4 @@
-const CACHE_NAME = "knc-26.05.31.0400";
+const CACHE_NAME = "knc-26.05.31.2214";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -13,7 +13,17 @@ const APP_SHELL = [
   "./assets/original-1999/wall.png",
   "./assets/original-1999/exit.png",
   "./assets/original-1999/intro-sz.png",
-  "./assets/original-1999/title-composite.png"
+  "./assets/original-1999/title-composite.png",
+  "./assets/windows-2003/place.gif",
+  "./assets/windows-2003/wall.gif",
+  "./assets/windows-2003/exit.gif",
+  "./assets/windows-2003/monster.gif",
+  "./assets/windows-2003/kryvavitsa.gif",
+  "./assets/windows-2003/shadow-1.gif",
+  "./assets/windows-2003/shadow-2.gif",
+  "./assets/windows-2003/shadow-3.gif",
+  "./assets/windows-2003/shadow-4.gif",
+  "./assets/windows-2003/shadow-5.gif"
 ];
 
 self.addEventListener("install", (event) => {

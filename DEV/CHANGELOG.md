@@ -9,6 +9,46 @@ All modifications to the project are logged here with timestamps.
 
 | Date | File | Component | Description |
 |------|------|-----------|-------------|
+| 2026-05-31 22:15:15 | version.ts, package.json, sw.js, i18n, docs | Release | Bump app/cache/save version 26.05.31.0400 -> 26.05.31.2214 for Windows 2003 visual mode release |
+| 2026-05-31 22:09:09 | src/style.css | render | Fix progressive zoom-in: board-wrap auto grid tracks fed canvas intrinsic size back into layout; pin minmax(0,1fr) tracks to break the resize feedback loop |
+| 2026-05-31 21:50:41 | src/render/canvas.ts | Rendering | Add strict fallback for Windows 2003 shadow sprite selection |
+| 2026-05-31 21:49:04 | README.md | GitHub Docs | Update render module description for Windows 2003 mode |
+| 2026-05-31 21:48:18 | DEV/ROADMAP.md | Roadmap | Add Windows 2003 visual mode to MVP target state |
+| 2026-05-31 21:47:50 | CHANGELOG.md | Release Notes | Record Windows 2003 visual mode and bilingual public pages |
+| 2026-05-31 21:47:24 | public/sw.js | PWA | Cache Windows 2003 visual mode assets offline |
+| 2026-05-31 21:46:35 | DEV/specification.ru | Specification | Add Windows 2003 visual mode and bilingual public pages |
+| 2026-05-31 21:46:03 | docs/index.html | GitHub Docs | Add play invitation and bilingual site note |
+| 2026-05-31 21:45:36 | docs/GAME_ru.md | Game Docs | Document Windows 2003 skin visual mode |
+| 2026-05-31 21:45:36 | docs/GAME.md | Game Docs | Document Windows 2003 skin visual mode |
+| 2026-05-31 21:45:00 | docs/HISTORY.md | GitHub Docs | Document Windows 2003 skin assets and bilingual public pages |
+| 2026-05-31 21:44:11 | README.md | GitHub Docs | Document Windows 2003 mode and bilingual public pages |
+| 2026-05-31 21:43:28 | public/privacy/index.html | GitHub Pages Site | Add bilingual privacy content and play CTA |
+| 2026-05-31 21:42:35 | public/about/index.html | GitHub Pages Site | Add bilingual about content rules visual modes and play CTA |
+| 2026-05-31 21:41:29 | public/history/index.html | GitHub Pages Site | Add bilingual history content rules visual modes and play CTA |
+| 2026-05-31 21:40:20 | public/history/index.html | GitHub Pages Site | Add bilingual navigation to history page |
+| 2026-05-31 21:39:53 | public/history/index.html | GitHub Pages Site | Add language switch and CTA styling to history page |
+| 2026-05-31 21:36:09 | src/render/canvas.ts | Rendering | Use full-cell scaling for Windows 2003 skin sprites |
+| 2026-05-31 21:35:37 | src/i18n/uk.json | i18n | Generalize graphics loading status |
+| 2026-05-31 21:35:37 | src/i18n/ru.json | i18n | Generalize graphics loading status |
+| 2026-05-31 21:35:37 | src/i18n/en.json | i18n | Generalize graphics loading status |
+| 2026-05-31 21:34:56 | src/storage/storage.test.ts | Storage | Cover Windows 2003 visual mode persistence |
+| 2026-05-31 21:34:09 | src/render/render.test.ts | Rendering | Cover Windows 2003 asset paths in render tests |
+| 2026-05-31 21:33:33 | src/i18n/uk.json | i18n | Add Windows 2003 visual mode label |
+| 2026-05-31 21:33:33 | src/i18n/ru.json | i18n | Add Windows 2003 visual mode label |
+| 2026-05-31 21:33:33 | src/i18n/en.json | i18n | Add Windows 2003 visual mode label |
+| 2026-05-31 21:32:43 | src/storage/index.ts | Storage | Persist Windows 2003 visual mode setting |
+| 2026-05-31 21:32:12 | src/ui/app.ts | UI | Expose Windows 2003 visual mode in settings |
+| 2026-05-31 21:31:35 | src/render/index.ts | Rendering | Export generalized visual asset loader |
+| 2026-05-31 21:30:32 | src/render/canvas.ts | Rendering | Render Windows 2003 intermediate visual mode |
+| 2026-05-31 21:29:40 | src/render/assets.ts | Rendering | Add Windows 2003 visual asset set loader |
+| 2026-05-31 21:28:37 | public/assets/windows-2003/* | Asset Promotion | Promote Windows 2003 VB6 skin GIF assets for intermediate visual mode |
+| 2026-05-31 21:11:33 | public/about/index.html | GitHub Pages Site | Expand public about page with history and implementation summary |
+| 2026-05-31 21:11:14 | public/history/index.html | GitHub Pages Site | Expand public history page with timeline versions and implementation notes |
+| 2026-05-31 21:10:20 | docs/GAME_ru.md | Game Docs | Update Russian rules mirror with history and current implementation |
+| 2026-05-31 21:09:56 | docs/GAME.md | Game Docs | Update English rules mirror with history and current implementation |
+| 2026-05-31 21:09:35 | docs/index.html | GitHub Docs | Link history and implementation documentation from docs index |
+| 2026-05-31 21:09:23 | README.md | GitHub Docs | Expand repository history and current implementation summary |
+| 2026-05-31 21:09:08 | docs/HISTORY.md | GitHub Docs | Add detailed public history and implementation document |
 | 2026-05-31 21:06:34 | DEV/ROADMAP.md | R11 MVP Release | Mark R11 as complete after public deploy smoke |
 | 2026-05-31 21:06:28 | CHANGELOG.md | R11 MVP Release | Record public deployment verification |
 | 2026-05-31 21:06:20 | DEV/QA_MVP_CHECKLIST.md | R11 MVP Release | Record successful public Pages smoke and release status |

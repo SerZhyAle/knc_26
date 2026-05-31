@@ -1,7 +1,7 @@
 import { createSeedFromTime } from "../game";
 import { adjacentCells, directionFromAdjacentCell, directionFromKey, GameController, type GameControllerSnapshot } from "../input";
 import { detectLocale, supportedLocales, translate, type Locale, type TranslationKey } from "../i18n";
-import { cellFromPoint, loadOriginal1999Assets, renderBoard, type BoardGeometry, type OriginalAssetSet, type VisualMode } from "../render";
+import { cellFromPoint, emptyVisualAssets, loadVisualAssets, renderBoard, type BoardGeometry, type VisualAssetCollection, type VisualMode } from "../render";
 import { loadGame, saveGame, type AppSettings } from "../storage";
 
 export async function mountApp(rootElement: HTMLElement): Promise<void> {
@@ -14,7 +14,7 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
   let snapshot = controller.snapshot();
   let geometry: BoardGeometry | undefined;
   let noticeTimer: number | undefined;
-  let assets: OriginalAssetSet = { loaded: false, sprites: {} };
+  let assets: VisualAssetCollection = emptyVisualAssets;
 
   const appElement = document.createElement("main");
   appElement.className = "game-app";
@@ -167,9 +167,9 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
     showNotice("notice.incompatibleReset");
   }
 
-  assets = await loadOriginal1999Assets();
+  assets = await loadVisualAssets();
   render();
-  if (!assets.loaded && settings.visualMode === "original1999") {
+  if (!activeVisualAssetsLoaded()) {
     showNotice("app.status.assetsFallback");
   }
 
@@ -179,7 +179,7 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
     }
 
     boardSelectElement.append(option("10", "10×10"), option("15", "15×15"), option("20", "20×20"), option("custom", "Custom"));
-    visualSelectElement.append(option("original1999", "Original 1999"), option("color", "Color"));
+    visualSelectElement.append(option("original1999", "Original 1999"), option("windows2003", "Windows 2003"), option("color", "Color"));
     widthInputElement.type = "number";
     widthInputElement.min = "10";
     widthInputElement.max = "100";
@@ -210,7 +210,7 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
     updateLocalizedLabels();
     updateControls();
     updateStats(snapshot);
-    statusElement.textContent = assets.loaded || settings.visualMode === "color" ? message("app.status.ready") : message("app.status.loadingAssets");
+    statusElement.textContent = activeVisualAssetsLoaded() ? message("app.status.ready") : message("app.status.loadingAssets");
     turnElement.textContent = `${message("hud.turn")}: ${String(snapshot.game.turn)}`;
     geometry = renderBoard(canvasElement, snapshot.game, {
       visualMode: settings.visualMode,
@@ -248,7 +248,20 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
 
     setOptionLabel(boardSelectElement, "custom", message("settings.custom"));
     setOptionLabel(visualSelectElement, "original1999", message("settings.visualOriginal"));
+    setOptionLabel(visualSelectElement, "windows2003", message("settings.visualWindows2003"));
     setOptionLabel(visualSelectElement, "color", message("settings.visualColor"));
+  }
+
+  function activeVisualAssetsLoaded(): boolean {
+    if (settings.visualMode === "original1999") {
+      return assets.original1999.loaded;
+    }
+
+    if (settings.visualMode === "windows2003") {
+      return assets.windows2003.loaded;
+    }
+
+    return true;
   }
 
   function applySettings(): void {

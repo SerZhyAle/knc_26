@@ -1,20 +1,22 @@
 import type { GameState, Position } from "../game";
-import type { OriginalAssetSet, SpriteKey } from "./assets";
+import type { SpriteKey, VisualAssetCollection, VisualAssetSet } from "./assets";
 import { calculateBoardGeometry, type BoardGeometry } from "./geometry";
 
-export type VisualMode = "original1999" | "color";
+export type VisualMode = "original1999" | "windows2003" | "color";
 
 export interface RenderOptions {
   readonly visualMode: VisualMode;
   readonly showGrid: boolean;
   readonly darkTheme: boolean;
-  readonly assets: OriginalAssetSet;
+  readonly assets: VisualAssetCollection;
   readonly legalMoves: readonly Position[];
 }
 
 const originalFieldColor = "#00aaaa";
+const windows2003FieldColor = "#ffffff";
 const darkBackgroundColor = "#141414";
 const lightBackgroundColor = "#f5f5f5";
+const windows2003ShadowSprites: readonly SpriteKey[] = ["shadow", "shadow2", "shadow3", "shadow4", "shadow5"];
 
 export function renderBoard(canvas: HTMLCanvasElement, state: GameState, options: RenderOptions): BoardGeometry {
   const context = canvas.getContext("2d");
@@ -44,18 +46,19 @@ export function renderBoardToContext(context: CanvasRenderingContext2D, state: G
   context.save();
   context.imageSmoothingEnabled = false;
   context.clearRect(0, 0, geometry.canvasWidth, geometry.canvasHeight);
-  context.fillStyle = options.visualMode === "original1999" ? originalFieldColor : options.darkTheme ? darkBackgroundColor : lightBackgroundColor;
+  context.fillStyle = fieldColor(options);
   context.fillRect(0, 0, geometry.canvasWidth, geometry.canvasHeight);
-  context.fillStyle = options.visualMode === "original1999" ? originalFieldColor : options.darkTheme ? "#20242a" : "#ffffff";
+  context.fillStyle = boardColor(options);
   context.fillRect(geometry.offsetX, geometry.offsetY, geometry.boardPixelWidth, geometry.boardPixelHeight);
+  drawEmptyTiles(context, state, geometry, options);
 
   drawHighlights(context, geometry, options.legalMoves);
   drawExit(context, geometry, state.exit, options);
   for (const wall of state.walls) {
     drawWall(context, geometry, wall, options);
   }
-  for (const shadow of state.shadows) {
-    drawActor(context, geometry, shadow.position, "shadow", "#111111", options);
+  for (const [shadowIndex, shadow] of state.shadows.entries()) {
+    drawActor(context, geometry, shadow.position, shadowSpriteForMode(options.visualMode, shadowIndex), "#111111", options);
   }
   drawActor(context, geometry, state.kryvavitsa, "kryvavitsa", "#8b1d2c", options);
   drawActor(context, geometry, state.monster, "monster", "#166534", options);
@@ -65,6 +68,46 @@ export function renderBoardToContext(context: CanvasRenderingContext2D, state: G
   }
 
   context.restore();
+}
+
+function fieldColor(options: RenderOptions): string {
+  if (options.visualMode === "original1999") {
+    return originalFieldColor;
+  }
+
+  if (options.visualMode === "windows2003") {
+    return windows2003FieldColor;
+  }
+
+  return options.darkTheme ? darkBackgroundColor : lightBackgroundColor;
+}
+
+function boardColor(options: RenderOptions): string {
+  if (options.visualMode === "original1999") {
+    return originalFieldColor;
+  }
+
+  if (options.visualMode === "windows2003") {
+    return windows2003FieldColor;
+  }
+
+  return options.darkTheme ? "#20242a" : "#ffffff";
+}
+
+function drawEmptyTiles(context: CanvasRenderingContext2D, state: GameState, geometry: BoardGeometry, options: RenderOptions): void {
+  if (options.visualMode !== "windows2003") {
+    return;
+  }
+
+  for (let rowIndex = 0; rowIndex < state.height; rowIndex += 1) {
+    for (let columnIndex = 0; columnIndex < state.width; columnIndex += 1) {
+      drawSprite(context, geometry, { x: columnIndex, y: rowIndex }, "empty", options);
+    }
+  }
+}
+
+function shadowSpriteForMode(visualMode: VisualMode, shadowIndex: number): SpriteKey {
+  return visualMode === "windows2003" ? windows2003ShadowSprites[shadowIndex % windows2003ShadowSprites.length] ?? "shadow" : "shadow";
 }
 
 function drawHighlights(context: CanvasRenderingContext2D, geometry: BoardGeometry, legalMoves: readonly Position[]): void {
@@ -112,16 +155,18 @@ function drawActor(context: CanvasRenderingContext2D, geometry: BoardGeometry, p
 }
 
 function drawSprite(context: CanvasRenderingContext2D, geometry: BoardGeometry, position: Position, spriteKey: SpriteKey, options: RenderOptions): boolean {
-  if (options.visualMode !== "original1999" || !options.assets.loaded) {
+  const assetSet = activeAssetSet(options);
+  if (assetSet === undefined || !assetSet.loaded) {
     return false;
   }
 
-  const image = options.assets.sprites[spriteKey];
+  const image = assetSet.sprites[spriteKey];
   if (image === undefined) {
     return false;
   }
 
-  const maxSize = Math.max(1, Math.floor(geometry.cellSize * 0.88));
+  const maxSpriteRatio = options.visualMode === "windows2003" ? 1 : 0.88;
+  const maxSize = Math.max(1, Math.floor(geometry.cellSize * maxSpriteRatio));
   const scale = Math.min(maxSize / image.width, maxSize / image.height);
   const width = Math.max(1, Math.floor(image.width * scale));
   const height = Math.max(1, Math.floor(image.height * scale));
@@ -129,6 +174,18 @@ function drawSprite(context: CanvasRenderingContext2D, geometry: BoardGeometry, 
   const top = Math.floor(geometry.offsetY + position.y * geometry.cellSize + (geometry.cellSize - height) / 2);
   context.drawImage(image, left, top, width, height);
   return true;
+}
+
+function activeAssetSet(options: RenderOptions): VisualAssetSet | undefined {
+  if (options.visualMode === "original1999") {
+    return options.assets.original1999;
+  }
+
+  if (options.visualMode === "windows2003") {
+    return options.assets.windows2003;
+  }
+
+  return undefined;
 }
 
 function drawGrid(context: CanvasRenderingContext2D, state: GameState, geometry: BoardGeometry, originalMode: boolean): void {

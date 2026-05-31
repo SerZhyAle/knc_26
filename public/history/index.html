@@ -3,43 +3,263 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="History of KnC from the 1999 DOS game to the 2026 Web/PWA remake." />
+    <meta name="description" content="Detailed history of KnC from the 1999 DOS game through the 2003-2005 Windows rewrites to the 2026 Web/PWA remake." />
     <meta property="og:title" content="KnC Game History" />
-    <meta property="og:description" content="1999 DOS origin and 2026 Web/PWA remake notes." />
+    <meta property="og:description" content="Version history, creation notes, and current implementation of KnC." />
     <meta property="og:image" content="../assets/og-image.png" />
     <meta property="og:url" content="https://serzhyale.github.io/knc_26/history/" />
     <link rel="canonical" href="https://serzhyale.github.io/knc_26/history/" />
     <title>KnC Game History</title>
     <style>
+      :root { color-scheme: dark; }
       body { margin: 0; background: #0f1115; color: #f8fafc; font-family: system-ui, sans-serif; line-height: 1.6; }
-      header, main { width: min(56rem, calc(100% - 2rem)); margin: 0 auto; }
-      header { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem 0; }
+      header, main, footer { width: min(68rem, calc(100% - 2rem)); margin: 0 auto; }
+      header { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem 0; align-items: center; position: sticky; top: 0; background: #0f1115; z-index: 1; }
+      nav, .language-switch, .cta-row { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
       a { color: #8ee06e; }
-      img { max-width: 100%; image-rendering: pixelated; border: 2px solid #00aaaa; }
-      section { border-top: 2px solid #3f4952; padding: 1rem 0; }
+      button, .cta { border: 1px solid #8ee06e; background: #172018; color: #f8fafc; padding: 0.45rem 0.7rem; font: inherit; text-decoration: none; }
+      button[aria-pressed="true"] { background: #8ee06e; color: #101314; }
+      h1 { margin-bottom: 0.25rem; }
+      h2 { margin-top: 0; }
+      img { max-width: 100%; image-rendering: pixelated; border: 2px solid #00aaaa; background: #ffffff; }
+      section { border-top: 2px solid #3f4952; padding: 1.25rem 0; }
+      table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+      th, td { border: 1px solid #3f4952; padding: 0.55rem; vertical-align: top; text-align: left; }
+      th { background: #1f2937; }
+      code { color: #fef08a; }
+      .lead { color: #cbd5e1; font-size: 1.08rem; }
+      .timeline { display: grid; gap: 1rem; }
+      .entry { border-left: 0.35rem solid #8ee06e; padding-left: 1rem; }
+      .entry h3 { margin: 0 0 0.25rem; }
+      .media-row, .sprite-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr)); gap: 1rem; align-items: end; }
+      .sprite-strip { align-items: end; }
+      .sprite-strip figure { margin: 0; min-width: 6rem; }
+      .sprite-strip img { width: 5.5rem; height: 5.5rem; object-fit: contain; padding: 0.35rem; }
+      figcaption { color: #cbd5e1; font-size: 0.9rem; margin-top: 0.35rem; }
+      footer { border-top: 2px solid #3f4952; padding: 1.25rem 0 2rem; }
+      @media (max-width: 42rem) { header { align-items: flex-start; flex-direction: column; } table { font-size: 0.92rem; } }
     </style>
   </head>
   <body>
     <header>
       <strong>KnC</strong>
-      <nav><a href="../">Play</a> · <a href="../about/">About</a> · <a href="../privacy/">Privacy</a></nav>
+      <nav>
+        <a href="../" data-i18n-en="Play" data-i18n-ru="Играть">Play</a>
+        <a href="../about/" data-i18n-en="About" data-i18n-ru="Об игре">About</a>
+        <a href="../privacy/" data-i18n-en="Privacy" data-i18n-ru="Конфиденциальность">Privacy</a>
+      </nav>
+      <div class="language-switch" aria-label="Language">
+        <button type="button" data-lang-button="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang-button="ru" aria-pressed="false">RU</button>
+      </div>
     </header>
     <main>
+      <article data-lang-panel="en">
       <h1>KnC Game History</h1>
+      <p class="lead">From a 1999 DOS survival puzzle by Serge Zhigunenko to the current 2026 Web/PWA remake with TypeScript, Canvas, local saves, Original 1999 graphics, and GitHub Pages deployment.</p>
       <section>
-        <h2>1999 · DOS</h2>
-        <p>The original game was written by Serge Zhigunenko for DOS. Its visual identity is the bright cyan field, red cross-shaped walls, green exit, and pixel characters.</p>
-        <img src="../assets/original-1999/title-composite.png" alt="Original 1999 title composite" />
+        <h2>Play First</h2>
+        <p>The public build is playable in the browser and can be installed as a PWA after the first load.</p>
+        <p class="cta-row"><a class="cta" href="../">Play KnC now</a><a href="https://github.com/serzhyale/knc_26">Source on GitHub</a></p>
       </section>
       <section>
-        <h2>2003-2005 · Windows</h2>
-        <p>Later Visual Basic versions experimented with multilingual resources, settings, and skin support.</p>
+        <h2>Version Timeline</h2>
+        <div class="timeline">
+          <article class="entry">
+            <h3>13 February 1999 · DOS original</h3>
+            <p>The first version was created by Serge Zhigunenko under the SZA author marker. It used the historical spelling Krovavitsa, arrow-key movement, Q/Esc quit, M sound toggle, N restart, and H to cancel a CPU-speed-dependent auto-move bug.</p>
+          </article>
+          <article class="entry">
+            <h3>1999-2001 · Scratch archive</h3>
+            <p>The archive contains helper experiments and configuration material, including a 15x15 field-size config and unrelated UI/media snippets. These files are preserved as context, not as the primary game implementation.</p>
+          </article>
+          <article class="entry">
+            <h3>2003 · Visual Basic 6 rewrite</h3>
+            <p>The KNC3 branch moved the game into a Windows GUI. The VB project describes itself as Krovavica &amp; Chudovishe v3 and added <code>ENG.LNG</code>/<code>RUS.LNG</code>, menus, registry-backed settings, and an author string dated 2003.</p>
+          </article>
+          <article class="entry">
+            <h3>2003-2005 · Expanded Windows version</h3>
+            <p>The later VB6 implementation became the most complete Windows-era branch. Its form code contains a <code>skin</code> switch, color mode, photo-head GIF sprites, brick walls, a Ukrainian-emblem exit, and five rotating Shadow heads. The small VB.NET branch is preserved as an abandoned attempt.</p>
+          </article>
+          <article class="entry">
+            <h3>2026 · Web/PWA MVP</h3>
+            <p>The current version is a browser-first remake. It runs on GitHub Pages, works as a PWA, saves locally in the browser, renders Canvas graphics, and supports Original 1999, Windows 2003 skin, and Modern Color modes.</p>
+          </article>
+        </div>
       </section>
       <section>
-        <h2>2026 · Web/PWA</h2>
-        <p>The current remake targets TypeScript, Canvas, local saves, offline PWA use, and GitHub Pages distribution.</p>
-        <img src="../assets/og-image.png" alt="Original gameplay reference" />
+        <h2>Original 1999 Identity</h2>
+        <p>The original menu used personal names for the three roles. The remake keeps this history documented while using modern player-facing names in the game UI.</p>
+        <table>
+          <thead><tr><th>Role</th><th>1999 name</th><th>Personal name</th><th>2026 UI name</th></tr></thead>
+          <tbody>
+            <tr><td>Player</td><td>Chudovishche</td><td>Sergey</td><td>Monster</td></tr>
+            <tr><td>Main hunter</td><td>Krovavitsa</td><td>Olga</td><td>Kryvavitsa</td></tr>
+            <tr><td>Random hunter</td><td>podKrovavnitsa</td><td>Lena</td><td>Shadow</td></tr>
+          </tbody>
+        </table>
+        <div class="media-row">
+          <img src="../assets/original-1999/title-composite.png" alt="Original 1999 title composite" />
+          <img src="../assets/og-image.png" alt="KnC original gameplay reference" />
+        </div>
       </section>
+      <section>
+        <h2>Version Differences</h2>
+        <table>
+          <thead><tr><th>Mechanic</th><th>1999 original</th><th>2026 remake</th></tr></thead>
+          <tbody>
+            <tr><td>Title spelling</td><td>Krovavitsa in historical material</td><td>Kryvavitsa in modern UI</td></tr>
+            <tr><td>Shadow lethality</td><td>25% chance on adjacency</td><td>100% after the Shadow action if adjacent</td></tr>
+            <tr><td>Restart cost</td><td>Could remove all current points</td><td>Applies a -500 score penalty, clamped at zero</td></tr>
+            <tr><td>Enemy timing</td><td>Had a CPU-speed-dependent auto-move behavior</td><td>Enemies move only after a player action</td></tr>
+            <tr><td>Sound</td><td>Music or sound toggle existed</td><td>Sound is outside MVP scope</td></tr>
+            <tr><td>Board shape</td><td>Square-board assumptions</td><td>Rectangular custom boards use <code>fieldBase = min(width, height)</code></td></tr>
+          </tbody>
+        </table>
+      </section>
+      <section>
+        <h2>Rules Summary</h2>
+        <table>
+          <tbody>
+            <tr><th>Goal</th><td>Move the Monster to the Exit.</td></tr>
+            <tr><th>Turn cycle</th><td>One player action triggers Monster, then Kryvavitsa, then all Shadows in shuffled order.</td></tr>
+            <tr><th>Movement</th><td>Only four orthogonal directions exist. Diagonal movement and diagonal kills do not exist.</td></tr>
+            <tr><th>Walls</th><td>The Monster pushes exactly one Wall. A Wall can move into an empty cell, crush a Shadow, or disappear into the Exit. Wall chains are blocked.</td></tr>
+            <tr><th>Defeat</th><td>Moving onto an enemy loses immediately. Orthogonal adjacency after each enemy action also loses.</td></tr>
+            <tr><th>Victory</th><td>Reaching the Exit immediately generates a new board and adds one Shadow to the next level.</td></tr>
+            <tr><th>Score</th><td>Exit +1000, Wall push +10, crushed Shadow +50, each Monster turn -10, restart -500, score cannot go below zero.</td></tr>
+          </tbody>
+        </table>
+      </section>
+      <section>
+        <h2>Visual Modes</h2>
+        <table>
+          <tbody>
+            <tr><th>Original 1999</th><td>Primary MVP mode: extracted DOS-style pixel sprites, bright cyan field, red cross-shaped Walls, green oval Exit.</td></tr>
+            <tr><th>Windows 2003 skin</th><td>Intermediate mode promoted from <code>OLD/KnC_NEW/*.GIF</code>: photo-head characters, brick Wall, white tiled field, Ukrainian-emblem Exit.</td></tr>
+            <tr><th>Modern Color</th><td>Fallback/debug mode: simple Canvas shapes and colors, useful when image assets fail to load.</td></tr>
+          </tbody>
+        </table>
+        <div class="sprite-strip">
+          <figure><img src="../assets/original-1999/monster.png" alt="Original 1999 Monster" /><figcaption>Original 1999</figcaption></figure>
+          <figure><img src="../assets/windows-2003/monster.gif" alt="Windows 2003 Monster" /><figcaption>Windows 2003 Monster</figcaption></figure>
+          <figure><img src="../assets/windows-2003/kryvavitsa.gif" alt="Windows 2003 Kryvavitsa" /><figcaption>Windows 2003 hunter</figcaption></figure>
+          <figure><img src="../assets/windows-2003/shadow-1.gif" alt="Windows 2003 Shadow" /><figcaption>Windows 2003 Shadow</figcaption></figure>
+          <figure><img src="../assets/windows-2003/wall.gif" alt="Windows 2003 Wall" /><figcaption>Brick Wall</figcaption></figure>
+          <figure><img src="../assets/windows-2003/exit.gif" alt="Windows 2003 Exit" /><figcaption>Exit</figcaption></figure>
+        </div>
+      </section>
+      <section>
+        <h2>Current Implementation</h2>
+        <p>Current MVP version: <code>26.05.31.2214</code>. The game is implemented with TypeScript, Vite, HTML5 Canvas, Vitest, ESLint, a static service worker, and GitHub Actions deployment to GitHub Pages.</p>
+        <table>
+          <thead><tr><th>Layer</th><th>Responsibility</th></tr></thead>
+          <tbody>
+            <tr><td><code>src/game/</code></td><td>Pure domain engine, board generation, scoring, deterministic RNG, Monster movement, Kryvavitsa and Shadow AI.</td></tr>
+            <tr><td><code>src/render/</code></td><td>Canvas geometry, Original 1999 assets, Windows 2003 skin assets, Modern Color fallback, smoothing disabled.</td></tr>
+            <tr><td><code>src/input/</code></td><td>Keyboard, mouse, and touch translation into turn commands.</td></tr>
+            <tr><td><code>src/ui/</code></td><td>HUD, menu, settings, help, about overlay, victory and defeat notifications.</td></tr>
+            <tr><td><code>src/storage/</code></td><td>localStorage save/resume, version compatibility, settings and record preservation.</td></tr>
+            <tr><td><code>public/</code></td><td>PWA manifest, service worker, runtime assets, and static history/about/privacy pages.</td></tr>
+          </tbody>
+        </table>
+        <div class="sprite-strip" aria-label="Original 1999 runtime sprites">
+          <figure><img src="../assets/original-1999/monster.png" alt="Monster sprite" /><figcaption>Monster</figcaption></figure>
+          <figure><img src="../assets/original-1999/kryvavitsa.png" alt="Kryvavitsa sprite" /><figcaption>Kryvavitsa</figcaption></figure>
+          <figure><img src="../assets/original-1999/shadow.png" alt="Shadow sprite" /><figcaption>Shadow</figcaption></figure>
+          <figure><img src="../assets/original-1999/wall.png" alt="Wall sprite" /><figcaption>Wall</figcaption></figure>
+          <figure><img src="../assets/original-1999/exit.png" alt="Exit sprite" /><figcaption>Exit</figcaption></figure>
+        </div>
+      </section>
+      <section>
+        <h2>Source Archive</h2>
+        <p>The Git repository keeps the historical source archive under <code>OLD/</code>, the canonical product specification under <code>DEV/</code>, human-readable rule mirrors under <code>docs/</code>, approved runtime assets under <code>public/assets/</code>, and the current implementation under <code>src/</code>.</p>
+        <p><a href="https://github.com/serzhyale/knc_26">Open the source repository</a></p>
+      </section>
+      </article>
+      <article data-lang-panel="ru" hidden>
+      <h1>КнС: история игры</h1>
+      <p class="lead">От DOS-игры 1999 года Сергея Жигуненко до Web/PWA-ремейка 2026 года на TypeScript, Canvas, localStorage, GitHub Pages и трёх режимах графики.</p>
+      <section>
+        <h2>Сначала играть</h2>
+        <p>Публичная сборка запускается в браузере и может устанавливаться как PWA после первой загрузки.</p>
+        <p class="cta-row"><a class="cta" href="../">Играть в КнС</a><a href="https://github.com/serzhyale/knc_26">Исходный код на GitHub</a></p>
+      </section>
+      <section>
+        <h2>Хронология версий</h2>
+        <div class="timeline">
+          <article class="entry"><h3>13 февраля 1999: DOS-оригинал</h3><p>Архив: <code>OLD/K&amp;C/</code>. Версия 1 использовала историческое написание «Кровавица», авторскую метку SZA, движение стрелками, Q/Esc для выхода, M для звука, N для перезапуска и H для отмены CPU-зависимого авто-движения врагов.</p></article>
+          <article class="entry"><h3>1999-2001: рабочий архив экспериментов</h3><p>Архив: <code>OLD/prg/</code>. Есть конфиг размера поля и вспомогательные пробы. Это исторический контекст, а не основная игровая реализация.</p></article>
+          <article class="entry"><h3>2003: VB6-переписывание KnC3</h3><p>Архив: <code>OLD/KNC3/</code>. Visual Basic-проект описывает себя как Krovavica &amp; Chudovishe v3. Появились Windows-формы, файлы <code>ENG.LNG</code>/<code>RUS.LNG</code>, настройки в реестре и авторская строка с датой 2003.</p></article>
+          <article class="entry"><h3>2003-2005: расширенная VB6-версия со скинами</h3><p>Архив: <code>OLD/KnC_NEW/</code>. Основная форма содержит переключатель <code>skin</code>, цветной режим, режим изображений, кирпичные стены, выход с украинским гербом, голову игрока, голову преследователя и пять чередующихся голов Теней.</p></article>
+          <article class="entry"><h3>2026: Web/PWA-ремейк</h3><p>Версия <code>26.05.31.2214</code>. Текущая сборка использует TypeScript, Vite, Canvas, сохранения в localStorage, игровые строки EN/RU/UK, PWA-файлы, GitHub Actions и публикацию на GitHub Pages.</p></article>
+        </div>
+      </section>
+      <section>
+        <h2>Основные правила</h2>
+        <table>
+          <tbody>
+            <tr><th>Цель</th><td>Довести Чудовище до Выхода.</td></tr>
+            <tr><th>Цикл хода</th><td>Одно действие игрока запускает ход Чудовища, затем Крывавицы, затем всех Теней в перемешанном порядке.</td></tr>
+            <tr><th>Движение</th><td>Есть только четыре ортогональных направления. Диагонального движения и диагонального убийства нет.</td></tr>
+            <tr><th>Стены</th><td>Чудовище толкает ровно одну Стену. Стена может уйти в пустую клетку, раздавить Тень или исчезнуть в Выходе. Цепочки Стен блокируют ход.</td></tr>
+            <tr><th>Поражение</th><td>Ход на врага сразу проигрывает. Соседство по вертикали или горизонтали после каждого хода врага тоже проигрывает.</td></tr>
+            <tr><th>Победа</th><td>Достижение Выхода сразу создаёт новое поле и добавляет одну Тень к следующему уровню.</td></tr>
+            <tr><th>Счёт</th><td>Выход +1000, толчок Стены +10, раздавленная Тень +50, каждый ход Чудовища -10, перезапуск -500, счёт не падает ниже нуля.</td></tr>
+          </tbody>
+        </table>
+      </section>
+      <section>
+        <h2>Режимы графики</h2>
+        <table>
+          <tbody>
+            <tr><th>Оригинал 1999</th><td>Основной режим MVP: извлечённые DOS-пиксельные спрайты, яркое бирюзовое поле, красные крестообразные Стены, зелёный овальный Выход.</td></tr>
+            <tr><th>Скин Windows 2003</th><td>Промежуточный режим из <code>OLD/KnC_NEW/*.GIF</code>: персонажи-головы, кирпичная Стена, белое поле-сетка, Выход с украинским гербом.</td></tr>
+            <tr><th>Современный Цвет</th><td>Резервный и отладочный режим: простые Canvas-фигуры и цвета, полезен при сбое загрузки изображений.</td></tr>
+          </tbody>
+        </table>
+        <div class="sprite-strip">
+          <figure><img src="../assets/original-1999/monster.png" alt="Чудовище 1999" /><figcaption>Чудовище 1999</figcaption></figure>
+          <figure><img src="../assets/windows-2003/monster.gif" alt="Чудовище Windows 2003" /><figcaption>Чудовище 2003</figcaption></figure>
+          <figure><img src="../assets/windows-2003/kryvavitsa.gif" alt="Крывавица Windows 2003" /><figcaption>Преследователь 2003</figcaption></figure>
+          <figure><img src="../assets/windows-2003/shadow-1.gif" alt="Тень Windows 2003" /><figcaption>Тень 2003</figcaption></figure>
+          <figure><img src="../assets/windows-2003/wall.gif" alt="Стена Windows 2003" /><figcaption>Кирпичная Стена</figcaption></figure>
+          <figure><img src="../assets/windows-2003/exit.gif" alt="Выход Windows 2003" /><figcaption>Выход</figcaption></figure>
+        </div>
+      </section>
+      </article>
     </main>
+    <footer>
+      <p><a class="cta" href="../" data-i18n-en="Play the current Web/PWA build" data-i18n-ru="Играть в текущую Web/PWA-версию">Play the current Web/PWA build</a></p>
+    </footer>
+    <script>
+      const supportedLanguages = ["en", "ru"];
+      const languageKey = "knc.site.lang";
+      const params = new URLSearchParams(window.location.search);
+      const requestedLanguage = params.get("lang");
+      const initialLanguage = supportedLanguages.includes(requestedLanguage) ? requestedLanguage : localStorage.getItem(languageKey) || "en";
+
+      function setLanguage(language) {
+        const activeLanguage = supportedLanguages.includes(language) ? language : "en";
+        document.documentElement.lang = activeLanguage;
+        localStorage.setItem(languageKey, activeLanguage);
+        for (const panel of document.querySelectorAll("[data-lang-panel]")) {
+          panel.hidden = panel.dataset.langPanel !== activeLanguage;
+        }
+        for (const button of document.querySelectorAll("[data-lang-button]")) {
+          button.setAttribute("aria-pressed", String(button.dataset.langButton === activeLanguage));
+        }
+        for (const element of document.querySelectorAll("[data-i18n-en]")) {
+          element.textContent = activeLanguage === "ru" ? element.dataset.i18nRu : element.dataset.i18nEn;
+        }
+        document.title = activeLanguage === "ru" ? "КнС: история игры" : "KnC Game History";
+      }
+
+      for (const button of document.querySelectorAll("[data-lang-button]")) {
+        button.addEventListener("click", () => setLanguage(button.dataset.langButton));
+      }
+
+      setLanguage(initialLanguage);
+    </script>
   </body>
 </html>

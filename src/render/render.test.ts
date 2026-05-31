@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { GameState } from "../game";
-import { original1999AssetPaths } from "./assets";
+import { emptyVisualAssets, original1999AssetPaths, windows2003AssetPaths } from "./assets";
 import { renderBoardToContext } from "./canvas";
 import { calculateBoardGeometry, cellFromPoint } from "./geometry";
 
@@ -31,6 +31,13 @@ describe("render pipeline", () => {
     for (const path of Object.values(original1999AssetPaths)) {
       expect(path).toContain("assets/original-1999/");
       expect(path).not.toContain("temp/");
+      expect(path).not.toContain("OLD/");
+    }
+
+    for (const path of Object.values(windows2003AssetPaths)) {
+      expect(path).toContain("assets/windows-2003/");
+      expect(path).not.toContain("temp/");
+      expect(path).not.toContain("OLD/");
     }
   });
 
@@ -44,7 +51,7 @@ describe("render pipeline", () => {
       visualMode: "color",
       showGrid: true,
       darkTheme: false,
-      assets: { loaded: false, sprites: {} },
+      assets: emptyVisualAssets,
       legalMoves: [{ x: 2, y: 1 }]
     });
 
