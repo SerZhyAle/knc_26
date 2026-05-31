@@ -9,6 +9,9 @@ All modifications to the project are logged here with timestamps.
 
 | Date | File | Component | Description |
 |------|------|-----------|-------------|
+| 2026-05-31 23:40:56 | version.ts, package.json, sw.js, i18n, docs | Release | Release 26.05.31.2328 -> 26.05.31.2340: restore lost black on Lena hair and Olga weapon sprites; bump cache version |
+| 2026-05-31 23:40:46 | public/assets/original-1999/kryvavitsa.png | Asset Fix | Restore lost black automatic weapon on Olga/Kryvavitsa sprite; recovered from elements/sprite_kryvavitsa_olga_clean.png |
+| 2026-05-31 23:40:46 | public/assets/original-1999/shadow.png | Asset Fix | Restore lost black hair on Lena/Shadow sprite (black was keyed out with the background during DOS extraction); recovered from elements/sprite_shadow_lena_clean.png |
 | 2026-05-31 23:28:55 | version.ts, package.json, sw.js, i18n, docs | Release | Release 26.05.31.2251 -> 26.05.31.2328: Kryvavitsa no longer flees on the killing step; bump cache version |
 | 2026-05-31 23:28:33 | src/game/engine.test.ts | Game | Add regression test: Kryvavitsa stays adjacent for the kill instead of fleeing toward the Exit |
 | 2026-05-31 23:28:33 | src/game/engine.ts | Game | Fix Kryvavitsa fleeing on the killing step: when already orthogonally adjacent to the Monster she now stays so the post-action adjacency check resolves the kill, instead of falling through to the exit-seeking fallback and vacating the adjacency |
