@@ -1,4 +1,4 @@
-import { createSeedFromTime } from "../game";
+import { createSeedFromTime, type Position } from "../game";
 import { adjacentCells, directionFromAdjacentCell, directionFromKey, GameController, type GameControllerSnapshot } from "../input";
 import { detectLocale, supportedLocales, translate, type Locale, type TranslationKey } from "../i18n";
 import { cellFromPoint, emptyVisualAssets, loadVisualAssets, renderBoard, type BoardGeometry, type VisualAssetCollection, type VisualMode } from "../render";
@@ -16,6 +16,9 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
   let geometry: BoardGeometry | undefined;
   let noticeTimer: number | undefined;
   let assets: VisualAssetCollection = emptyVisualAssets;
+  let defeatPending = false;
+  let deathCell: Position | undefined;
+  let defeatKillerKey: TranslationKey | undefined;
 
   const appElement = document.createElement("main");
   appElement.className = "game-app";
@@ -44,6 +47,14 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
   const noticeElement = document.createElement("div");
   noticeElement.className = "notice-strip";
   noticeElement.hidden = true;
+
+  const defeatBannerElement = document.createElement("div");
+  defeatBannerElement.className = "defeat-banner";
+  defeatBannerElement.hidden = true;
+  const defeatTitleElement = document.createElement("strong");
+  const defeatHintElement = document.createElement("span");
+  defeatHintElement.className = "defeat-hint";
+  defeatBannerElement.append(defeatTitleElement, defeatHintElement);
 
   const bottomBarElement = document.createElement("footer");
   bottomBarElement.className = "bottom-bar";
@@ -111,7 +122,7 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
   overlayElement.append(drawerElement);
   topBarElement.append(menuButtonElement, titleElement, statsElement);
   bottomBarElement.append(statusElement, turnElement);
-  canvasWrapElement.append(canvasElement, noticeElement);
+  canvasWrapElement.append(canvasElement, noticeElement, defeatBannerElement);
 
   const introOverlay = createIntroOverlay({
     translate: (key) => message(key),
@@ -136,16 +147,22 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
     }
   });
   restartButtonElement.addEventListener("click", () => {
+    clearDefeat();
     snapshot = controller.restart();
     persist();
     render();
     showNotice("notice.restart");
   });
   newGameButtonElement.addEventListener("click", () => {
+    clearDefeat();
     snapshot = controller.newGame();
     persist();
     render();
     showNotice("notice.newGame");
+  });
+  defeatBannerElement.addEventListener("click", (event) => {
+    event.stopPropagation();
+    continueAfterDefeat();
   });
   introButtonElement.addEventListener("click", () => {
     closeDrawer();
@@ -233,12 +250,20 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
     updateStats(snapshot);
     statusElement.textContent = activeVisualAssetsLoaded() ? message("app.status.ready") : message("app.status.loadingAssets");
     turnElement.textContent = `${message("hud.turn")}: ${String(snapshot.game.turn)}`;
+    if (defeatPending && defeatKillerKey !== undefined) {
+      defeatTitleElement.textContent = message(defeatKillerKey);
+      defeatHintElement.textContent = message("defeat.continue");
+      defeatBannerElement.hidden = false;
+    } else {
+      defeatBannerElement.hidden = true;
+    }
     geometry = renderBoard(canvasElement, snapshot.game, {
       visualMode: settings.visualMode,
       showGrid: settings.showGrid,
       darkTheme: settings.darkTheme,
       assets,
-      legalMoves: adjacentCells(snapshot.game.monster, snapshot.game.width, snapshot.game.height)
+      legalMoves: defeatPending ? [] : adjacentCells(snapshot.game.monster, snapshot.game.width, snapshot.game.height),
+      deathCell
     });
   }
 
@@ -286,6 +311,7 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
   }
 
   function applySettings(): void {
+    clearDefeat();
     const selectedBoard = boardSelectElement.value;
     const nextWidth = selectedBoard === "custom" ? clampBoardSide(Number(widthInputElement.value)) : Number(selectedBoard);
     const nextHeight = selectedBoard === "custom" ? clampBoardSide(Number(heightInputElement.value)) : Number(selectedBoard);
@@ -301,6 +327,12 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
       return;
     }
 
+    if (defeatPending) {
+      event.preventDefault();
+      continueAfterDefeat();
+      return;
+    }
+
     const direction = directionFromKey(event.key);
     if (direction === undefined) {
       return;
@@ -311,6 +343,11 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
   }
 
   function handlePointerDown(event: PointerEvent): void {
+    if (defeatPending) {
+      continueAfterDefeat();
+      return;
+    }
+
     if (geometry === undefined) {
       return;
     }
@@ -334,13 +371,42 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
     }
 
     snapshot = update.snapshot;
+    if (snapshot.notice === "defeat") {
+      enterDefeat(snapshot);
+    }
     persist();
     render();
     if (snapshot.notice === "victory") {
       showNotice("notice.victory");
-    } else if (snapshot.notice === "defeat") {
-      showNotice("notice.defeat");
     }
+  }
+
+  function enterDefeat(currentSnapshot: GameControllerSnapshot): void {
+    defeatPending = true;
+    for (const event of currentSnapshot.lastEvents) {
+      if (event.type === "defeat") {
+        deathCell = { x: event.at.x, y: event.at.y };
+        defeatKillerKey = event.by === "kryvavitsa" ? "defeat.byKryvavitsa" : "defeat.byShadow";
+      }
+    }
+  }
+
+  function continueAfterDefeat(): void {
+    if (!defeatPending) {
+      return;
+    }
+
+    clearDefeat();
+    snapshot = controller.dismissDefeat();
+    persist();
+    render();
+  }
+
+  function clearDefeat(): void {
+    defeatPending = false;
+    deathCell = undefined;
+    defeatKillerKey = undefined;
+    defeatBannerElement.hidden = true;
   }
 
   function openDrawer(): void {

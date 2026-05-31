@@ -319,7 +319,7 @@ Not in MVP:
 
 ## Current Implementation
 
-The current MVP version is `26.05.31.2340`. It is implemented with TypeScript, Vite, HTML5 Canvas, Vitest, ESLint, a static service worker, and GitHub Pages deployment.
+The current MVP version is `26.06.01.0047`. It is implemented with TypeScript, Vite, HTML5 Canvas, Vitest, ESLint, a static service worker, and GitHub Pages deployment.
 
 Implementation boundaries:
 

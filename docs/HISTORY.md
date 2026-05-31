@@ -83,7 +83,7 @@ The Web/PWA version is a remake, not a byte-for-byte port. The major documented 
 
 ## Current Web/PWA Implementation
 
-The current MVP release is **`26.05.31.2340`**.
+The current MVP release is **`26.06.01.0047`**.
 
 Implementation summary:
 

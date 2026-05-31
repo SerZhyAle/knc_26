@@ -36,7 +36,7 @@ export class GameController {
     this.random = new SeededRandom(options.seed);
     this.boardSize = copyBoardSize(options.boardSize);
     this.progress = capProgressLevel(options.progress ?? createInitialProgress(), this.boardSize);
-    this.game = options.game ?? this.generateCurrentBoard();
+    this.game = options.game !== undefined && options.game.status === "playing" ? options.game : this.generateCurrentBoard();
   }
 
   public snapshot(): GameControllerSnapshot {
@@ -71,13 +71,26 @@ export class GameController {
     this.lastEvents = turnResult.events.slice();
     this.notice = progressResult.outcome === "none" ? "none" : progressResult.outcome;
 
-    if (progressResult.outcome === "victory" || progressResult.outcome === "defeat") {
+    if (progressResult.outcome === "victory") {
       this.game = this.generateCurrentBoard();
+    } else if (progressResult.outcome === "defeat") {
+      // Keep the board frozen at the moment of death so the UI can show where
+      // and who killed the Monster. The next board is generated on dismissDefeat().
+      this.game = turnResult.state;
+      this.locked = true;
     } else {
       this.game = turnResult.state;
     }
 
     return { accepted: true, snapshot: this.snapshot() };
+  }
+
+  public dismissDefeat(): GameControllerSnapshot {
+    this.game = this.generateCurrentBoard();
+    this.locked = false;
+    this.lastEvents = [];
+    this.notice = "none";
+    return this.snapshot();
   }
 
   public restart(): GameControllerSnapshot {

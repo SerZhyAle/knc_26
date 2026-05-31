@@ -70,6 +70,31 @@ describe("game controller", () => {
     expect(update.snapshot.game.turn).toBe(0);
   });
 
+  it("freezes the death board and locks on defeat, then resumes on dismissDefeat", () => {
+    const controller = new GameController({
+      boardSize: { width: 10, height: 10 },
+      seed: 60,
+      progress: createInitialProgress(),
+      game: makeState({ monster: { x: 1, y: 1 }, kryvavitsa: { x: 8, y: 8 }, shadows: [{ id: "shadow-1", position: { x: 2, y: 1 } }] })
+    });
+
+    const update = controller.move("right");
+
+    expect(update.accepted).toBe(true);
+    expect(update.snapshot.notice).toBe("defeat");
+    expect(update.snapshot.locked).toBe(true);
+    expect(update.snapshot.game.status).toBe("lost");
+    expect(update.snapshot.game.monster).toEqual({ x: 2, y: 1 });
+    expect(update.snapshot.lastEvents).toContainEqual({ type: "defeat", reason: "monsterEnteredEnemy", by: "shadow", at: { x: 2, y: 1 } });
+
+    const resumed = controller.dismissDefeat();
+
+    expect(resumed.locked).toBe(false);
+    expect(resumed.notice).toBe("none");
+    expect(resumed.game.status).toBe("playing");
+    expect(resumed.game.turn).toBe(0);
+  });
+
   it("caps restored over-capacity level before generating a board", () => {
     const controller = new GameController({ boardSize: { width: 10, height: 10 }, seed: 50, progress: { level: 120, score: 0, recordLevel: 120 } });
     const snapshot = controller.snapshot();

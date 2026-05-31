@@ -10,6 +10,7 @@ export interface RenderOptions {
   readonly darkTheme: boolean;
   readonly assets: VisualAssetCollection;
   readonly legalMoves: readonly Position[];
+  readonly deathCell?: Position | undefined;
 }
 
 const originalFieldColor = "#00aaaa";
@@ -63,6 +64,10 @@ export function renderBoardToContext(context: CanvasRenderingContext2D, state: G
   drawActor(context, geometry, state.kryvavitsa, "kryvavitsa", "#8b1d2c", options);
   drawActor(context, geometry, state.monster, "monster", "#166534", options);
 
+  if (options.deathCell !== undefined) {
+    drawDeathMarker(context, geometry, options.deathCell);
+  }
+
   if (options.showGrid) {
     drawGrid(context, state, geometry, options.visualMode === "original1999");
   }
@@ -115,6 +120,17 @@ function drawHighlights(context: CanvasRenderingContext2D, geometry: BoardGeomet
   for (const position of legalMoves) {
     context.fillRect(geometry.offsetX + position.x * geometry.cellSize, geometry.offsetY + position.y * geometry.cellSize, geometry.cellSize, geometry.cellSize);
   }
+}
+
+function drawDeathMarker(context: CanvasRenderingContext2D, geometry: BoardGeometry, position: Position): void {
+  const left = geometry.offsetX + position.x * geometry.cellSize;
+  const top = geometry.offsetY + position.y * geometry.cellSize;
+  context.fillStyle = "rgba(220, 20, 20, 0.38)";
+  context.fillRect(left, top, geometry.cellSize, geometry.cellSize);
+  context.strokeStyle = "#dc1414";
+  context.lineWidth = Math.max(2, Math.floor(geometry.cellSize * 0.09));
+  const inset = context.lineWidth / 2;
+  context.strokeRect(left + inset, top + inset, geometry.cellSize - context.lineWidth, geometry.cellSize - context.lineWidth);
 }
 
 function drawWall(context: CanvasRenderingContext2D, geometry: BoardGeometry, position: Position, options: RenderOptions): void {

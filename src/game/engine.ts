@@ -159,7 +159,7 @@ function resolveMonsterAction(state: GameState, direction: Direction): { readonl
       state: nextState,
       events: [
         { type: "playerMoved", from: copyPosition(state.monster), to: copyPosition(target) },
-        { type: "defeat", reason: "monsterEnteredEnemy", by: "monster", at: copyPosition(target) }
+        { type: "defeat", reason: "monsterEnteredEnemy", by: targetCell, at: copyPosition(target) }
       ]
     };
   }

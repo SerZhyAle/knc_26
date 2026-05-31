@@ -1,7 +1,7 @@
 {
   "about.body": "A 2026 Web/PWA remake of the 1999 DOS game by Serge Zhigunenko.",
   "about.title": "About",
-  "about.version": "Version 26.05.31.2340",
+  "about.version": "Version 26.06.01.0047",
   "action.apply": "Apply",
   "action.close": "Close",
   "action.newGame": "New game",
@@ -12,6 +12,9 @@
   "app.status.loadingAssets": "Loading graphics assets",
   "app.status.ready": "Ready",
   "app.title": "Kryvavitsa and the Monster",
+  "defeat.byKryvavitsa": "Kryvavitsa shot the Monster!",
+  "defeat.byShadow": "A Shadow stabbed the Monster!",
+  "defeat.continue": "Click or press any key to try again",
   "help.body": "Move the Monster to the Exit. Every move lets Kryvavitsa act first, then all Shadows. Orthogonal enemy contact after an enemy action is defeat. Push Walls to open routes or crush Shadows.",
   "help.title": "Rules",
   "hud.level": "Level",

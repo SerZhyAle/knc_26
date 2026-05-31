@@ -1,7 +1,7 @@
 # KnC MVP QA Checklist
 
 Date: 2026-05-31
-Version: 26.05.31.2340
+Version: 26.06.01.0047
 
 ## Automated Verification
 
@@ -48,7 +48,7 @@ Version: 26.05.31.2340
 | GitHub repository | `https://github.com/SerZhyAle/knc_26` |
 | Public GitHub Pages URL | `https://serzhyale.github.io/knc_26/` |
 | `sitemap.xml` canonical URLs | `https://serzhyale.github.io/knc_26/` |
-| Git release tag | `26.05.31.2340` |
+| Git release tag | `26.06.01.0047` |
 
 ## Readiness Verdict
 

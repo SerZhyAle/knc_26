@@ -132,7 +132,7 @@ describe("domain engine", () => {
     const result = playTurn(state, "right", new FixedRandom());
 
     expect(result.state.status).toBe("lost");
-    expect(result.events).toContainEqual({ type: "defeat", reason: "monsterEnteredEnemy", by: "monster", at: { x: 2, y: 1 } });
+    expect(result.events).toContainEqual({ type: "defeat", reason: "monsterEnteredEnemy", by: "shadow", at: { x: 2, y: 1 } });
   });
 
   it("moves Kryvavitsa with X-axis greedy priority before Y-axis", () => {

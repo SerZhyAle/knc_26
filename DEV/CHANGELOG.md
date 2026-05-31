@@ -9,6 +9,13 @@ All modifications to the project are logged here with timestamps.
 
 | Date | File | Component | Description |
 |------|------|-----------|-------------|
+| 2026-06-01 00:47:22 | version.ts, package.json, sw.js, i18n, docs | Release | Release 26.05.31.2340 -> 26.06.01.0047: defeat screen (freeze + killer banner) instead of auto-restart; bump cache version |
+| 2026-06-01 00:42:21 | src/i18n/en.json, ru.json, uk.json | i18n | Add defeat.byKryvavitsa/byShadow/continue strings |
+| 2026-06-01 00:42:21 | src/style.css | UI | Style defeat banner (centered red card with continue hint) |
+| 2026-06-01 00:42:21 | src/ui/app.ts | UI | Defeat screen: freeze board, red death marker, banner naming the killer (Kryvavitsa shot / Shadow stabbed); continue on click/key via dismissDefeat |
+| 2026-06-01 00:42:21 | src/render/canvas.ts | Rendering | Add optional deathCell render option drawing a red marker on the cell where the Monster died |
+| 2026-06-01 00:42:21 | src/game/engine.ts | Game | monsterEnteredEnemy defeat now reports the actual enemy (kryvavitsa/shadow) in 'by' instead of 'monster' |
+| 2026-06-01 00:42:21 | src/input/controller.ts | Input | Defeat no longer auto-restarts: freeze death board and lock; add dismissDefeat() to generate next board on demand; ignore loaded non-playing game on construct |
 | 2026-05-31 23:40:56 | version.ts, package.json, sw.js, i18n, docs | Release | Release 26.05.31.2328 -> 26.05.31.2340: restore lost black on Lena hair and Olga weapon sprites; bump cache version |
 | 2026-05-31 23:40:46 | public/assets/original-1999/kryvavitsa.png | Asset Fix | Restore lost black automatic weapon on Olga/Kryvavitsa sprite; recovered from elements/sprite_kryvavitsa_olga_clean.png |
 | 2026-05-31 23:40:46 | public/assets/original-1999/shadow.png | Asset Fix | Restore lost black hair on Lena/Shadow sprite (black was keyed out with the background during DOS extraction); recovered from elements/sprite_shadow_lena_clean.png |

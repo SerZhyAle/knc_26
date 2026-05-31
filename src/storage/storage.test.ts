@@ -76,7 +76,7 @@ describe("storage", () => {
   });
 
   it("exposes the current save version", () => {
-    expect(saveVersion).toBe("26.05.31.2340");
+    expect(saveVersion).toBe("26.06.01.0047");
   });
 });
 
