@@ -9,6 +9,12 @@ All modifications to the project are logged here with timestamps.
 
 | Date | File | Component | Description |
 |------|------|-----------|-------------|
+| 2026-05-31 22:51:37 | version.ts, package.json, sw.js, i18n, docs | Release | Release 26.05.31.2223 -> 26.05.31.2251: first-launch 1999-style intro screen; bump cache version |
+| 2026-05-31 22:38:25 | src/style.css | UI | Style intro overlay: DOS-grey screen, pixelated logo/portraits, teal cast squares, blinking start button |
+| 2026-05-31 22:38:25 | src/i18n/en.json, ru.json, uk.json | i18n | Add intro screen strings (cast title, character names/descriptions, start prompt, menu.intro); RU is 1:1 with 1999 original |
+| 2026-05-31 22:38:25 | src/storage/index.ts | Storage | Add hasSeenIntro/markIntroSeen helpers (knc.intro.v1 flag) |
+| 2026-05-31 22:38:25 | src/ui/app.ts | UI | Wire intro overlay: show once on first launch via localStorage flag, reopenable via Intro menu button, block game keys while open |
+| 2026-05-31 22:38:25 | src/ui/intro.ts | UI | Add first-launch 1999-style intro overlay (S.Z. present, title logo, cast block with three characters, dismiss on click/key) |
 | 2026-05-31 22:23:41 | version.ts, package.json, sw.js, i18n, docs | Release | Patch release 26.05.31.2214 -> 26.05.31.2223: bump cache version so the vertical board-zoom CSS hotfix reaches cached clients |
 | 2026-05-31 22:22:40 | src/style.css | render | Fix board zoom growth (vertical): game-app used min-height:100vh (indefinite) so canvas height:100% fell back to its growing height attribute; switch to height:100dvh to make the height chain definite |
 | 2026-05-31 22:15:15 | version.ts, package.json, sw.js, i18n, docs | Release | Bump app/cache/save version 26.05.31.0400 -> 26.05.31.2214 for Windows 2003 visual mode release |

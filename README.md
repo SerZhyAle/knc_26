@@ -55,7 +55,7 @@ npm run build
 
 ## Current Implementation
 
-The MVP release `26.05.31.2223` contains the complete browser implementation: pure TypeScript domain engine, deterministic board generation, Canvas rendering with Original 1999 assets, Windows 2003 skin GIF assets, and Color fallback, keyboard/mouse/touch input, HUD and overlays, localStorage save/resume, EN/RU/UK UI strings, bilingual EN/RU public documentation pages, PWA manifest, service worker, GitHub Actions CI, and GitHub Pages deployment.
+The MVP release `26.05.31.2251` contains the complete browser implementation: pure TypeScript domain engine, deterministic board generation, Canvas rendering with Original 1999 assets, Windows 2003 skin GIF assets, and Color fallback, keyboard/mouse/touch input, HUD and overlays, localStorage save/resume, EN/RU/UK UI strings, bilingual EN/RU public documentation pages, PWA manifest, service worker, GitHub Actions CI, and GitHub Pages deployment.
 
 ## Public Pages
 
@@ -70,4 +70,4 @@ The game uses localStorage only. There is no server-side account, telemetry, ana
 
 ## Version
 
-MVP version: `26.05.31.2223`
+MVP version: `26.05.31.2251`

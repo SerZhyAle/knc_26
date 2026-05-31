@@ -37,6 +37,15 @@ export interface LoadResult {
 }
 
 const storageKey = "knc.save.v1";
+const introSeenKey = "knc.intro.v1";
+
+export function hasSeenIntro(storage: StoragePort): boolean {
+  return storage.getItem(introSeenKey) === "1";
+}
+
+export function markIntroSeen(storage: StoragePort): void {
+  storage.setItem(introSeenKey, "1");
+}
 
 export function defaultSettings(locale: Locale): AppSettings {
   return {

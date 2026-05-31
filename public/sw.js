@@ -1,4 +1,4 @@
-const CACHE_NAME = "knc-26.05.31.2223";
+const CACHE_NAME = "knc-26.05.31.2251";
 const APP_SHELL = [
   "./",
   "./index.html",

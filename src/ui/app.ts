@@ -2,7 +2,8 @@ import { createSeedFromTime } from "../game";
 import { adjacentCells, directionFromAdjacentCell, directionFromKey, GameController, type GameControllerSnapshot } from "../input";
 import { detectLocale, supportedLocales, translate, type Locale, type TranslationKey } from "../i18n";
 import { cellFromPoint, emptyVisualAssets, loadVisualAssets, renderBoard, type BoardGeometry, type VisualAssetCollection, type VisualMode } from "../render";
-import { loadGame, saveGame, type AppSettings } from "../storage";
+import { hasSeenIntro, loadGame, markIntroSeen, saveGame, type AppSettings } from "../storage";
+import { createIntroOverlay } from "./intro";
 
 export async function mountApp(rootElement: HTMLElement): Promise<void> {
   const detectedLocale = detectLocale(navigator.language);
@@ -74,7 +75,9 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
   restartButtonElement.type = "button";
   const newGameButtonElement = document.createElement("button");
   newGameButtonElement.type = "button";
-  actionRowElement.append(restartButtonElement, newGameButtonElement);
+  const introButtonElement = document.createElement("button");
+  introButtonElement.type = "button";
+  actionRowElement.append(restartButtonElement, newGameButtonElement, introButtonElement);
 
   const settingsSectionElement = document.createElement("section");
   settingsSectionElement.className = "drawer-section";
@@ -109,7 +112,16 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
   topBarElement.append(menuButtonElement, titleElement, statsElement);
   bottomBarElement.append(statusElement, turnElement);
   canvasWrapElement.append(canvasElement, noticeElement);
-  appElement.append(topBarElement, canvasWrapElement, bottomBarElement, overlayElement);
+
+  const introOverlay = createIntroOverlay({
+    translate: (key) => message(key),
+    onDismiss: () => {
+      markIntroSeen(window.localStorage);
+      canvasElement.focus();
+    }
+  });
+
+  appElement.append(topBarElement, canvasWrapElement, bottomBarElement, overlayElement, introOverlay.element);
   rootElement.replaceChildren(appElement);
 
   menuButtonElement.addEventListener("click", () => {
@@ -134,6 +146,10 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
     persist();
     render();
     showNotice("notice.newGame");
+  });
+  introButtonElement.addEventListener("click", () => {
+    closeDrawer();
+    introOverlay.open();
   });
   applyButtonElement.addEventListener("click", applySettings);
   languageSelectElement.addEventListener("change", () => {
@@ -165,6 +181,10 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
   render();
   if (loadResult.incompatible) {
     showNotice("notice.incompatibleReset");
+  }
+
+  if (!hasSeenIntro(window.localStorage)) {
+    introOverlay.open();
   }
 
   assets = await loadVisualAssets();
@@ -200,6 +220,7 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
     closeButtonElement.setAttribute("aria-label", message("menu.close"));
     restartButtonElement.textContent = message("action.restart");
     newGameButtonElement.textContent = message("action.newGame");
+    introButtonElement.textContent = message("menu.intro");
     settingsTitleElement.textContent = message("settings.title");
     applyButtonElement.textContent = message("action.apply");
     helpTitleElement.textContent = message("help.title");
@@ -276,7 +297,7 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
   }
 
   function handleKeyDown(event: KeyboardEvent): void {
-    if (!overlayElement.hidden) {
+    if (introOverlay.isOpen() || !overlayElement.hidden) {
       return;
     }
 
