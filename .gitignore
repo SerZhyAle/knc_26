@@ -1,0 +1,56 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+.yarn/cache/
+
+# Build and generated outputs
+build/
+dist/
+coverage/
+.vite/
+.cache/
+*.tsbuildinfo
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.example.json
+
+# Agent and temporary artifacts
+temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+
+# Language/runtime generated folders
+**/bin/
+**/obj/
+
+# DOSBox local captures and ad-hoc media recordings
+OLD/K&C/*.avi
+OLD/K&C/*.mp4
+OLD/K&C/*.mkv
+OLD/K&C/*.wav
+OLD/K&C/*.png
+
+# Large/generated extraction outputs must be promoted intentionally
+*_extract/
+frames_all/
+frames_unique/

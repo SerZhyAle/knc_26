@@ -1,0 +1,88 @@
+# EditorConfig: Consistent code formatting across the project
+# https://editorconfig.org
+
+# Root configuration (don't check parent directories)
+root = true
+
+# Default for all files
+[*]
+charset = utf-8
+end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# JavaScript / TypeScript
+[*.{js,jsx,ts,tsx}]
+indent_style = space
+indent_size = 2
+max_line_length = 100
+
+# JSON
+[*.json]
+indent_style = space
+indent_size = 2
+max_line_length = off
+
+# YAML
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+# Python
+[*.py]
+indent_style = space
+indent_size = 4
+max_line_length = 88
+charset = utf-8
+
+# Java / Kotlin
+[*.{java,kt,kts}]
+indent_style = space
+indent_size = 4
+max_line_length = 120
+
+# C# / .NET
+[*.cs]
+indent_style = space
+indent_size = 4
+max_line_length = 120
+
+# Markdown
+[*.md]
+indent_style = space
+indent_size = 2
+max_line_length = off
+trim_trailing_whitespace = false
+
+# TOML (build configurations)
+[*.toml]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+# Gradle / Maven
+[*.{gradle,gradle.kts,pom.xml,xml}]
+indent_style = space
+indent_size = 4
+max_line_length = 120
+
+# Shell scripts
+[*.{sh,bash,ps1}]
+indent_style = space
+indent_size = 4
+max_line_length = 120
+end_of_line = lf
+
+# Properties files
+[*.properties]
+indent_style = space
+indent_size = 0
+max_line_length = off
+charset = utf-8
+
+# SQL
+[*.sql]
+indent_style = space
+indent_size = 2
+max_line_length = 120

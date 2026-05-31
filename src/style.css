@@ -1,0 +1,267 @@
+:root {
+  color: #f8fafc;
+  background: #202124;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.game-app {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-height: 100vh;
+  background: #00aaaa;
+  color: #101314;
+}
+
+.game-app.dark {
+  background: #00aaaa;
+  color: #f8fafc;
+}
+
+.top-bar,
+.bottom-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  background: #0f1115;
+  color: #f8fafc;
+  padding: 0.35rem 0.75rem;
+}
+
+.top-bar {
+  justify-content: space-between;
+}
+
+.bottom-bar {
+  justify-content: space-between;
+  font-size: 0.875rem;
+}
+
+.game-title {
+  margin: 0;
+  min-width: 8rem;
+  font-size: 1.2rem;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+.hud-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(3.5rem, auto));
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.hud-stats div {
+  display: grid;
+  gap: 0.1rem;
+  text-align: right;
+}
+
+.hud-stats dt {
+  color: #b7c4c9;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.hud-stats dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+.icon-button,
+button,
+select,
+input {
+  border: 2px solid #0f1115;
+  border-radius: 6px;
+  background: #f8fafc;
+  color: #101314;
+  font: inherit;
+}
+
+button,
+select,
+input {
+  min-height: 2.25rem;
+  padding: 0.35rem 0.55rem;
+}
+
+button {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+button:hover,
+button:focus-visible,
+select:focus-visible,
+input:focus-visible,
+.game-canvas:focus-visible {
+  outline: 3px solid #fde047;
+  outline-offset: 2px;
+}
+
+.icon-button {
+  display: inline-grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  place-items: center;
+  padding: 0;
+  font-weight: 900;
+}
+
+.board-wrap {
+  position: relative;
+  display: grid;
+  min-height: 0;
+  padding: 0.5rem;
+}
+
+.game-canvas {
+  width: 100%;
+  height: 100%;
+  min-height: 12rem;
+  border: 3px solid #0f1115;
+  background: #00aaaa;
+  image-rendering: pixelated;
+  touch-action: none;
+}
+
+.notice-strip {
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: min(28rem, calc(100% - 2rem));
+  border: 2px solid #0f1115;
+  border-radius: 6px;
+  background: #fde047;
+  color: #101314;
+  padding: 0.6rem 0.85rem;
+  text-align: center;
+  font-weight: 800;
+  box-shadow: 4px 4px 0 #0f1115;
+}
+
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  justify-items: end;
+  background: rgba(15, 17, 21, 0.58);
+  z-index: 10;
+}
+
+.drawer-overlay[hidden] {
+  display: none;
+}
+
+.drawer {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  width: min(26rem, 100%);
+  height: 100%;
+  overflow: auto;
+  background: #f3efe6;
+  color: #101314;
+  padding: 1rem;
+  box-shadow: -6px 0 0 #0f1115;
+}
+
+.drawer-header,
+.action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.drawer h2,
+.drawer h3,
+.drawer p {
+  margin: 0;
+}
+
+.drawer-section {
+  display: grid;
+  gap: 0.65rem;
+  border-top: 2px solid #0f1115;
+  padding-top: 0.8rem;
+}
+
+.drawer label {
+  display: grid;
+  gap: 0.25rem;
+  font-weight: 700;
+}
+
+.checkbox-row {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}
+
+.checkbox-row input {
+  width: 1.25rem;
+  min-height: 1.25rem;
+}
+
+.game-app.dark .drawer {
+  background: #202124;
+  color: #f8fafc;
+}
+
+.game-app.dark button,
+.game-app.dark select,
+.game-app.dark input {
+  background: #f8fafc;
+  color: #101314;
+}
+
+@media (max-width: 640px) {
+  .top-bar {
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    display: grid;
+  }
+
+  .hud-stats {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(4, 1fr);
+    width: 100%;
+  }
+
+  .hud-stats div {
+    text-align: left;
+  }
+
+  .game-title {
+    font-size: 1rem;
+  }
+}
+
+@media (max-height: 420px) {
+  .top-bar,
+  .bottom-bar {
+    min-height: 2.2rem;
+    padding-block: 0.2rem;
+  }
+
+  .game-canvas {
+    min-height: 8rem;
+  }
+}

@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /temp/
+Disallow: /OLD/
+Disallow: /node_modules/
+Disallow: /dist/
+Disallow: /DEV/
+
+Sitemap: https://serzhyale.github.io/knc_26/sitemap.xml
