@@ -192,6 +192,24 @@ describe("domain engine", () => {
     expect(result.events).toContainEqual({ type: "defeat", reason: "enemyAdjacent", by: "kryvavitsa", at: { x: 2, y: 2 } });
   });
 
+  it("keeps Kryvavitsa adjacent for the kill instead of fleeing toward the Exit", () => {
+    const state = withState({
+      monster: { x: 2, y: 2 },
+      kryvavitsa: { x: 4, y: 2 },
+      walls: [],
+      exit: { x: 5, y: 5 }
+    });
+
+    const result = playTurn(state, "right", new FixedRandom());
+
+    expect(result.state.monster).toEqual({ x: 3, y: 2 });
+    expect(result.state.kryvavitsa).toEqual({ x: 4, y: 2 });
+    expect(result.state.status).toBe("lost");
+    expect(result.events).toContainEqual({ type: "kryvavitsaStayed", at: { x: 4, y: 2 } });
+    expect(result.events).toContainEqual({ type: "defeat", reason: "enemyAdjacent", by: "kryvavitsa", at: { x: 4, y: 2 } });
+    expect(result.events.some((event) => event.type === "kryvavitsaMoved")).toBe(false);
+  });
+
   it("does not treat diagonal contact as lethal adjacency", () => {
     expect(areOrthogonallyAdjacent({ x: 1, y: 1 }, { x: 2, y: 2 })).toBe(false);
     expect(areOrthogonallyAdjacent({ x: 1, y: 1 }, { x: 2, y: 1 })).toBe(true);

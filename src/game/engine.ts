@@ -280,6 +280,14 @@ function resolveKryvavitsaAction(state: GameState, random: RandomSource): { read
 }
 
 function chooseKryvavitsaDirection(state: GameState, random: RandomSource): Direction | undefined {
+  // Already orthogonally adjacent to the Monster: stay put so the post-action
+  // adjacency check turns the contact into a kill. Kryvavitsa must never vacate
+  // an adjacency (otherwise the exit-seeking fallback below makes her flee on the
+  // very step she should catch the Monster).
+  if (areOrthogonallyAdjacent(state.kryvavitsa, state.monster)) {
+    return undefined;
+  }
+
   for (const direction of greedyDirections(state.kryvavitsa, state.monster)) {
     if (canEnemyMoveTo(state, step(state.kryvavitsa, direction))) {
       return direction;

@@ -9,6 +9,9 @@ All modifications to the project are logged here with timestamps.
 
 | Date | File | Component | Description |
 |------|------|-----------|-------------|
+| 2026-05-31 23:28:55 | version.ts, package.json, sw.js, i18n, docs | Release | Release 26.05.31.2251 -> 26.05.31.2328: Kryvavitsa no longer flees on the killing step; bump cache version |
+| 2026-05-31 23:28:33 | src/game/engine.test.ts | Game | Add regression test: Kryvavitsa stays adjacent for the kill instead of fleeing toward the Exit |
+| 2026-05-31 23:28:33 | src/game/engine.ts | Game | Fix Kryvavitsa fleeing on the killing step: when already orthogonally adjacent to the Monster she now stays so the post-action adjacency check resolves the kill, instead of falling through to the exit-seeking fallback and vacating the adjacency |
 | 2026-05-31 22:51:37 | version.ts, package.json, sw.js, i18n, docs | Release | Release 26.05.31.2223 -> 26.05.31.2251: first-launch 1999-style intro screen; bump cache version |
 | 2026-05-31 22:38:25 | src/style.css | UI | Style intro overlay: DOS-grey screen, pixelated logo/portraits, teal cast squares, blinking start button |
 | 2026-05-31 22:38:25 | src/i18n/en.json, ru.json, uk.json | i18n | Add intro screen strings (cast title, character names/descriptions, start prompt, menu.intro); RU is 1:1 with 1999 original |
