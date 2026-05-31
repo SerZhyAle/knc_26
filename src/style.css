@@ -19,7 +19,8 @@ body {
 .game-app {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
   background: #00aaaa;
   color: #101314;
 }

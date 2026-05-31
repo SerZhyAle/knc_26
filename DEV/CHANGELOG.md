@@ -9,6 +9,8 @@ All modifications to the project are logged here with timestamps.
 
 | Date | File | Component | Description |
 |------|------|-----------|-------------|
+| 2026-05-31 22:23:41 | version.ts, package.json, sw.js, i18n, docs | Release | Patch release 26.05.31.2214 -> 26.05.31.2223: bump cache version so the vertical board-zoom CSS hotfix reaches cached clients |
+| 2026-05-31 22:22:40 | src/style.css | render | Fix board zoom growth (vertical): game-app used min-height:100vh (indefinite) so canvas height:100% fell back to its growing height attribute; switch to height:100dvh to make the height chain definite |
 | 2026-05-31 22:15:15 | version.ts, package.json, sw.js, i18n, docs | Release | Bump app/cache/save version 26.05.31.0400 -> 26.05.31.2214 for Windows 2003 visual mode release |
 | 2026-05-31 22:09:09 | src/style.css | render | Fix progressive zoom-in: board-wrap auto grid tracks fed canvas intrinsic size back into layout; pin minmax(0,1fr) tracks to break the resize feedback loop |
 | 2026-05-31 21:50:41 | src/render/canvas.ts | Rendering | Add strict fallback for Windows 2003 shadow sprite selection |

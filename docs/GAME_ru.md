@@ -319,7 +319,7 @@
 
 ## Текущая реализация
 
-Текущая версия MVP — `26.05.31.2214`. Реализация использует TypeScript, Vite, HTML5 Canvas, Vitest, ESLint, статический service worker и развёртывание через GitHub Pages.
+Текущая версия MVP — `26.05.31.2223`. Реализация использует TypeScript, Vite, HTML5 Canvas, Vitest, ESLint, статический service worker и развёртывание через GitHub Pages.
 
 Границы реализации:
 
