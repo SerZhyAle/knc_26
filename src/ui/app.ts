@@ -1,7 +1,7 @@
 import { createSeedFromTime, type Position } from "../game";
 import { adjacentCells, directionFromAdjacentCell, directionFromKey, GameController, type GameControllerSnapshot } from "../input";
 import { detectLocale, supportedLocales, translate, type Locale, type TranslationKey } from "../i18n";
-import { cellFromPoint, emptyVisualAssets, loadVisualAssets, renderBoard, type BoardGeometry, type VisualAssetCollection, type VisualMode } from "../render";
+import { cellFromPoint, emptyVisualAssets, loadVisualAssets, renderBoard, type BoardGeometry, type CompletionHighlight, type MovementAnimation, type VisualAssetCollection, type VisualMode } from "../render";
 import { hasSeenIntro, loadGame, markIntroSeen, saveGame, type AppSettings } from "../storage";
 import { createIntroOverlay } from "./intro";
 
@@ -19,6 +19,10 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
   let defeatPending = false;
   let deathCell: Position | undefined;
   let defeatKillerKey: TranslationKey | undefined;
+  let animationStartTime: number | undefined;
+  let animationFrameRequest: number | undefined;
+  let movementState: { readonly monsterFrom: Position; readonly kryvavitsaFrom: Position; readonly shadowsFrom: readonly Position[] } | undefined;
+  let completionHighlightStartTime: number | undefined;
 
   const appElement = document.createElement("main");
   appElement.className = "game-app";
@@ -257,13 +261,36 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
     } else {
       defeatBannerElement.hidden = true;
     }
+    let movement: MovementAnimation | undefined;
+    if (movementState !== undefined && animationStartTime !== undefined) {
+      const animationProgress = (performance.now() - animationStartTime) / 400;
+      if (animationProgress < 1) {
+        movement = {
+          animationProgress,
+          monsterFrom: movementState.monsterFrom,
+          kryvavitsaFrom: movementState.kryvavitsaFrom,
+          shadowsFrom: movementState.shadowsFrom
+        };
+      }
+    }
+
+    let completionHighlight: CompletionHighlight | undefined;
+    if (completionHighlightStartTime !== undefined) {
+      const highlightProgress = (performance.now() - completionHighlightStartTime) / 600;
+      if (highlightProgress < 1) {
+        completionHighlight = { animationProgress: highlightProgress };
+      }
+    }
+
     geometry = renderBoard(canvasElement, snapshot.game, {
       visualMode: settings.visualMode,
       showGrid: settings.showGrid,
       darkTheme: settings.darkTheme,
       assets,
       legalMoves: defeatPending ? [] : adjacentCells(snapshot.game.monster, snapshot.game.width, snapshot.game.height),
-      deathCell
+      deathCell,
+      movement,
+      completionHighlight
     });
   }
 
@@ -365,20 +392,63 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
   }
 
   function move(direction: Parameters<GameController["move"]>[0]): void {
+    const currentSnapshot = controller.snapshot();
+    movementState = {
+      monsterFrom: { x: currentSnapshot.game.monster.x, y: currentSnapshot.game.monster.y },
+      kryvavitsaFrom: { x: currentSnapshot.game.kryvavitsa.x, y: currentSnapshot.game.kryvavitsa.y },
+      shadowsFrom: currentSnapshot.game.shadows.map((s) => ({ x: s.position.x, y: s.position.y }))
+    };
+
     const update = controller.move(direction);
     if (!update.accepted) {
+      movementState = undefined;
       return;
     }
 
     snapshot = update.snapshot;
+    animationStartTime = performance.now();
+
+    if (animationFrameRequest !== undefined) {
+      cancelAnimationFrame(animationFrameRequest);
+    }
+
+    function animateFrame(): void {
+      render();
+      if (animationStartTime !== undefined && performance.now() - animationStartTime < 400) {
+        animationFrameRequest = requestAnimationFrame(animateFrame);
+      } else {
+        animationStartTime = undefined;
+        animationFrameRequest = undefined;
+        movementState = undefined;
+        render();
+      }
+    }
+
+    animationFrameRequest = requestAnimationFrame(animateFrame);
+
     if (snapshot.notice === "defeat") {
       enterDefeat(snapshot);
-    }
-    persist();
-    render();
-    if (snapshot.notice === "victory") {
+    } else if (snapshot.notice === "victory") {
+      movementState = undefined;
+      animationStartTime = undefined;
+      completionHighlightStartTime = performance.now();
+      if (animationFrameRequest !== undefined) {
+        cancelAnimationFrame(animationFrameRequest);
+      }
+      function highlightFrame(): void {
+        render();
+        if (completionHighlightStartTime !== undefined && performance.now() - completionHighlightStartTime < 600) {
+          animationFrameRequest = requestAnimationFrame(highlightFrame);
+        } else {
+          completionHighlightStartTime = undefined;
+          animationFrameRequest = undefined;
+          render();
+        }
+      }
+      animationFrameRequest = requestAnimationFrame(highlightFrame);
       showNotice("notice.victory");
     }
+    persist();
   }
 
   function enterDefeat(currentSnapshot: GameControllerSnapshot): void {

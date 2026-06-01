@@ -9,6 +9,10 @@ All modifications to the project are logged here with timestamps.
 
 | Date | File | Component | Description |
 |------|------|-----------|-------------|
+| 2026-06-01 23:29:39 | src/render/canvas.ts, src/render/index.ts, src/ui/app.ts | animation | add completion highlight effect for level transitions (no walking animation on victory) |
+| 2026-06-01 23:26:08 | src/render/canvas.ts, src/render/index.ts, src/ui/app.ts | animation | add walking animation with character movement interpolation and stepping foot effect |
+| 2026-06-01 23:20:50 | src/audio/sounds.ts | audio | update stomp sound to two quick thumps for alternating foot steps |
+| 2026-06-01 23:19:46 | src/audio/sounds.ts, src/input/controller.ts | audio | add stomp sound on monster movement using web audio api |
 | 2026-06-01 00:47:22 | version.ts, package.json, sw.js, i18n, docs | Release | Release 26.05.31.2340 -> 26.06.01.0047: defeat screen (freeze + killer banner) instead of auto-restart; bump cache version |
 | 2026-06-01 00:42:21 | src/i18n/en.json, ru.json, uk.json | i18n | Add defeat.byKryvavitsa/byShadow/continue strings |
 | 2026-06-01 00:42:21 | src/style.css | UI | Style defeat banner (centered red card with continue hint) |

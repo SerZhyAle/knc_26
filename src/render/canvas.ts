@@ -4,6 +4,17 @@ import { calculateBoardGeometry, type BoardGeometry } from "./geometry";
 
 export type VisualMode = "original1999" | "windows2003" | "color";
 
+export interface MovementAnimation {
+  readonly animationProgress: number;
+  readonly monsterFrom: Position;
+  readonly kryvavitsaFrom: Position;
+  readonly shadowsFrom: readonly Position[];
+}
+
+export interface CompletionHighlight {
+  readonly animationProgress: number;
+}
+
 export interface RenderOptions {
   readonly visualMode: VisualMode;
   readonly showGrid: boolean;
@@ -11,6 +22,8 @@ export interface RenderOptions {
   readonly assets: VisualAssetCollection;
   readonly legalMoves: readonly Position[];
   readonly deathCell?: Position | undefined;
+  readonly movement?: MovementAnimation | undefined;
+  readonly completionHighlight?: CompletionHighlight | undefined;
 }
 
 const originalFieldColor = "#00aaaa";
@@ -58,11 +71,24 @@ export function renderBoardToContext(context: CanvasRenderingContext2D, state: G
   for (const wall of state.walls) {
     drawWall(context, geometry, wall, options);
   }
+  const getInterpolatedPosition = (startPos: Position, endPos: Position, progress: number): Position => {
+    if (progress >= 1) return endPos;
+    return {
+      x: startPos.x + (endPos.x - startPos.x) * progress,
+      y: startPos.y + (endPos.y - startPos.y) * progress
+    };
+  };
+
+  const monsterPos = options.movement ? getInterpolatedPosition(options.movement.monsterFrom, state.monster, options.movement.animationProgress) : state.monster;
+  const kryvavitsaPos = options.movement ? getInterpolatedPosition(options.movement.kryvavitsaFrom, state.kryvavitsa, options.movement.animationProgress) : state.kryvavitsa;
+
   for (const [shadowIndex, shadow] of state.shadows.entries()) {
-    drawActor(context, geometry, shadow.position, shadowSpriteForMode(options.visualMode, shadowIndex), "#111111", options);
+    const shadowFrom = options.movement?.shadowsFrom[shadowIndex];
+    const shadowPos = shadowFrom ? getInterpolatedPosition(shadowFrom, shadow.position, options.movement.animationProgress) : shadow.position;
+    drawActor(context, geometry, shadowPos, shadowSpriteForMode(options.visualMode, shadowIndex), "#111111", options, "shadow", options.movement?.animationProgress);
   }
-  drawActor(context, geometry, state.kryvavitsa, "kryvavitsa", "#8b1d2c", options);
-  drawActor(context, geometry, state.monster, "monster", "#166534", options);
+  drawActor(context, geometry, kryvavitsaPos, "kryvavitsa", "#8b1d2c", options, "kryvavitsa", options.movement?.animationProgress);
+  drawActor(context, geometry, monsterPos, "monster", "#166534", options, "monster", options.movement?.animationProgress);
 
   if (options.deathCell !== undefined) {
     drawDeathMarker(context, geometry, options.deathCell);
@@ -145,6 +171,16 @@ function drawWall(context: CanvasRenderingContext2D, geometry: BoardGeometry, po
 }
 
 function drawExit(context: CanvasRenderingContext2D, geometry: BoardGeometry, position: Position, options: RenderOptions): void {
+  if (options.completionHighlight !== undefined) {
+    const brightness = Math.sin(options.completionHighlight.animationProgress * Math.PI) * 0.5 + 0.5;
+    const glowSize = Math.sin(options.completionHighlight.animationProgress * Math.PI) * geometry.cellSize * 0.3;
+    const center = cellCenter(geometry, position);
+    context.beginPath();
+    context.ellipse(center.x, center.y, geometry.cellSize * 0.32 + glowSize, geometry.cellSize * 0.22 + glowSize, 0, 0, Math.PI * 2);
+    context.fillStyle = `rgba(34, 197, 94, ${brightness * 0.6})`;
+    context.fill();
+  }
+
   if (drawSprite(context, geometry, position, "exit", options)) {
     return;
   }
@@ -158,19 +194,31 @@ function drawExit(context: CanvasRenderingContext2D, geometry: BoardGeometry, po
   context.fill();
 }
 
-function drawActor(context: CanvasRenderingContext2D, geometry: BoardGeometry, position: Position, spriteKey: SpriteKey, color: string, options: RenderOptions): void {
-  if (drawSprite(context, geometry, position, spriteKey, options)) {
+function drawActor(context: CanvasRenderingContext2D, geometry: BoardGeometry, position: Position, spriteKey: SpriteKey, color: string, options: RenderOptions, actorType?: "monster" | "kryvavitsa" | "shadow", movementProgress?: number): void {
+  const offset = getActorVerticalOffset(geometry, movementProgress ?? 0);
+
+  if (options.completionHighlight !== undefined && actorType === "monster") {
+    const brightness = Math.sin(options.completionHighlight.animationProgress * Math.PI) * 0.5 + 0.5;
+    const glowSize = Math.sin(options.completionHighlight.animationProgress * Math.PI) * geometry.cellSize * 0.2;
+    const center = cellCenter(geometry, position);
+    context.beginPath();
+    context.arc(center.x, center.y + offset, geometry.cellSize * 0.32 + glowSize, 0, Math.PI * 2);
+    context.fillStyle = `rgba(22, 101, 52, ${brightness * 0.6})`;
+    context.fill();
+  }
+
+  if (drawSprite(context, geometry, position, spriteKey, options, offset)) {
     return;
   }
 
   const center = cellCenter(geometry, position);
   context.beginPath();
-  context.arc(center.x, center.y, geometry.cellSize * 0.32, 0, Math.PI * 2);
+  context.arc(center.x, center.y + offset, geometry.cellSize * 0.32, 0, Math.PI * 2);
   context.fillStyle = color;
   context.fill();
 }
 
-function drawSprite(context: CanvasRenderingContext2D, geometry: BoardGeometry, position: Position, spriteKey: SpriteKey, options: RenderOptions): boolean {
+function drawSprite(context: CanvasRenderingContext2D, geometry: BoardGeometry, position: Position, spriteKey: SpriteKey, options: RenderOptions, verticalOffset: number = 0): boolean {
   const assetSet = activeAssetSet(options);
   if (assetSet === undefined || !assetSet.loaded) {
     return false;
@@ -187,7 +235,7 @@ function drawSprite(context: CanvasRenderingContext2D, geometry: BoardGeometry, 
   const width = Math.max(1, Math.floor(image.width * scale));
   const height = Math.max(1, Math.floor(image.height * scale));
   const left = Math.floor(geometry.offsetX + position.x * geometry.cellSize + (geometry.cellSize - width) / 2);
-  const top = Math.floor(geometry.offsetY + position.y * geometry.cellSize + (geometry.cellSize - height) / 2);
+  const top = Math.floor(geometry.offsetY + position.y * geometry.cellSize + (geometry.cellSize - height) / 2 + verticalOffset);
   context.drawImage(image, left, top, width, height);
   return true;
 }
@@ -238,4 +286,14 @@ function insetRect(geometry: BoardGeometry, position: Position, ratio: number): 
     y: geometry.offsetY + position.y * geometry.cellSize + inset,
     size: Math.max(1, geometry.cellSize - inset * 2)
   };
+}
+
+function getActorVerticalOffset(geometry: BoardGeometry, progress: number): number {
+  const bounceHeight = geometry.cellSize * 0.08;
+  const normalizedProgress = progress % 1;
+  if (normalizedProgress < 0.5) {
+    return Math.sin(normalizedProgress * Math.PI) * bounceHeight;
+  } else {
+    return Math.sin((normalizedProgress - 0.5) * Math.PI) * bounceHeight;
+  }
 }

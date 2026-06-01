@@ -1,5 +1,6 @@
 import type { BoardSize, Direction, GameEvent, GameProgress, GameState } from "../game";
 import { applyRestartPenalty, applyTurnProgress, createInitialProgress, generateBoard, getMaximumShadowLevelForBoard, playTurn, resetProgressForBoardSize, resetProgressForNewGame, SeededRandom } from "../game";
+import { playStompSound } from "../audio/sounds";
 
 export interface GameControllerOptions {
   readonly boardSize: BoardSize;
@@ -65,6 +66,8 @@ export class GameController {
     if (!turnResult.countedAction) {
       return { accepted: false, snapshot: this.snapshot() };
     }
+
+    playStompSound();
 
     const progressResult = applyTurnProgress(this.progress, turnResult, getMaximumShadowLevelForBoard(this.boardSize));
     this.progress = progressResult.progress;
