@@ -432,7 +432,7 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
       movementState = undefined;
       animationStartTime = undefined;
       completionHighlightStartTime = performance.now();
-      if (animationFrameRequest !== undefined) {
+      if (animationFrameRequest) {
         cancelAnimationFrame(animationFrameRequest);
       }
       function highlightFrame(): void {

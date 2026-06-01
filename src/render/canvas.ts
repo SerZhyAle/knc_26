@@ -177,7 +177,7 @@ function drawExit(context: CanvasRenderingContext2D, geometry: BoardGeometry, po
     const center = cellCenter(geometry, position);
     context.beginPath();
     context.ellipse(center.x, center.y, geometry.cellSize * 0.32 + glowSize, geometry.cellSize * 0.22 + glowSize, 0, 0, Math.PI * 2);
-    context.fillStyle = `rgba(34, 197, 94, ${brightness * 0.6})`;
+    context.fillStyle = `rgba(34, 197, 94, ${String(brightness * 0.6)})`;
     context.fill();
   }
 
@@ -203,7 +203,7 @@ function drawActor(context: CanvasRenderingContext2D, geometry: BoardGeometry, p
     const center = cellCenter(geometry, position);
     context.beginPath();
     context.arc(center.x, center.y + offset, geometry.cellSize * 0.32 + glowSize, 0, Math.PI * 2);
-    context.fillStyle = `rgba(22, 101, 52, ${brightness * 0.6})`;
+    context.fillStyle = `rgba(22, 101, 52, ${String(brightness * 0.6)})`;
     context.fill();
   }
 
