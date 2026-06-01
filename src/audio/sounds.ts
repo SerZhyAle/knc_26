@@ -1,8 +1,8 @@
 export function playStompSound(): void {
   try {
-    const ContextClass = window.AudioContext || (window as unknown as Record<string, unknown>)["webkitAudioContext"];
-    if (!ContextClass) return;
-    const audioContext = new (ContextClass as typeof AudioContext)();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const AudioCtx = (window.AudioContext || (window as any).webkitAudioContext) as any;
+    const audioContext = new AudioCtx();
     const now = audioContext.currentTime;
 
     for (let i = 0; i < 2; i++) {
