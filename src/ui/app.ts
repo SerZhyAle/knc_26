@@ -21,7 +21,7 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
   let defeatKillerKey: TranslationKey | undefined;
   let animationStartTime: number | undefined;
   let animationFrameRequest: number | undefined;
-  let movementState: { readonly monsterFrom: Position; readonly kryvavitsaFrom: Position; readonly shadowsFrom: readonly Position[] } | undefined;
+  let movementState: { readonly monsterFrom: Position; readonly kryvavitsaFrom: Position; readonly shadowsFrom: readonly Position[]; readonly killedShadowIds: Set<string> } | undefined;
   let completionHighlightStartTime: number | undefined;
 
   const appElement = document.createElement("main");
@@ -269,7 +269,8 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
           animationProgress,
           monsterFrom: movementState.monsterFrom,
           kryvavitsaFrom: movementState.kryvavitsaFrom,
-          shadowsFrom: movementState.shadowsFrom
+          shadowsFrom: movementState.shadowsFrom,
+          killedShadowIds: movementState.killedShadowIds
         };
       }
     }
@@ -393,16 +394,25 @@ export async function mountApp(rootElement: HTMLElement): Promise<void> {
 
   function move(direction: Parameters<GameController["move"]>[0]): void {
     const currentSnapshot = controller.snapshot();
+    const killedShadowIds = new Set<string>();
+
     movementState = {
       monsterFrom: { x: currentSnapshot.game.monster.x, y: currentSnapshot.game.monster.y },
       kryvavitsaFrom: { x: currentSnapshot.game.kryvavitsa.x, y: currentSnapshot.game.kryvavitsa.y },
-      shadowsFrom: currentSnapshot.game.shadows.map((s) => ({ x: s.position.x, y: s.position.y }))
+      shadowsFrom: currentSnapshot.game.shadows.map((s) => ({ x: s.position.x, y: s.position.y })),
+      killedShadowIds
     };
 
     const update = controller.move(direction);
     if (!update.accepted) {
       movementState = undefined;
       return;
+    }
+
+    for (const event of update.snapshot.lastEvents) {
+      if (event.type === "shadowCrushed") {
+        killedShadowIds.add(event.shadowId);
+      }
     }
 
     snapshot = update.snapshot;

@@ -9,6 +9,7 @@ All modifications to the project are logged here with timestamps.
 
 | Date | File | Component | Description |
 |------|------|-----------|-------------|
+| 2026-06-01 23:43:13 | src/render/canvas.ts, src/ui/app.ts | animation | exclude killed shadows from movement animation |
 | 2026-06-01 23:29:39 | src/render/canvas.ts, src/render/index.ts, src/ui/app.ts | animation | add completion highlight effect for level transitions (no walking animation on victory) |
 | 2026-06-01 23:26:08 | src/render/canvas.ts, src/render/index.ts, src/ui/app.ts | animation | add walking animation with character movement interpolation and stepping foot effect |
 | 2026-06-01 23:20:50 | src/audio/sounds.ts | audio | update stomp sound to two quick thumps for alternating foot steps |

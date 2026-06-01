@@ -9,6 +9,7 @@ export interface MovementAnimation {
   readonly monsterFrom: Position;
   readonly kryvavitsaFrom: Position;
   readonly shadowsFrom: readonly Position[];
+  readonly killedShadowIds?: Set<string> | undefined;
 }
 
 export interface CompletionHighlight {
@@ -83,6 +84,9 @@ export function renderBoardToContext(context: CanvasRenderingContext2D, state: G
   const kryvavitsaPos = options.movement ? getInterpolatedPosition(options.movement.kryvavitsaFrom, state.kryvavitsa, options.movement.animationProgress) : state.kryvavitsa;
 
   for (const [shadowIndex, shadow] of state.shadows.entries()) {
+    if (options.movement?.killedShadowIds?.has(shadow.id)) {
+      continue;
+    }
     const shadowFrom = options.movement?.shadowsFrom[shadowIndex];
     const shadowPos = shadowFrom ? getInterpolatedPosition(shadowFrom, shadow.position, options.movement.animationProgress) : shadow.position;
     drawActor(context, geometry, shadowPos, shadowSpriteForMode(options.visualMode, shadowIndex), "#111111", options, "shadow", options.movement?.animationProgress);
